@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pastoral Juvenil Luqueña — PJL</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa: #ff69b4;
+  --rosa-dark: #e05090;
+  --rosa-light: #ffe0f0;
+  --azul: #0000ff;
+  --azul-dark: #0000cc;
+  --azul-light: #e0e0ff;
+  --blanco: #ffffff;
+  --gris: #f5f5f8;
+  --gris-med: #e8e8f0;
+  --text-dark: #1a1a2e;
+  --text-med: #4a4a6a;
+  --text-light: #8888aa;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,255,0.08);
+  --shadow-hover: 0 8px 40px rgba(0,0,255,0.18);
+  --radius: 16px;
+  --radius-sm: 8px;
+  --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--font-body);
+  background: var(--blanco);
+  color: var(--text-dark);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ============ ACCESSIBILITY BAR ============ */
+#access-bar {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  background: var(--azul);
+  color: #fff;
+  padding: 4px 20px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px;
+  transition: var(--transition);
+}
+#access-bar.high-contrast {
+  background: #000;
+  border-bottom: 2px solid #ff0;
+}
+.access-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; cursor: pointer;
+  border-radius: 4px; padding: 2px 8px;
+  font-size: 11px; font-family: var(--font-body);
+  transition: var(--transition);
+}
+.access-btn:hover { background: rgba(255,255,255,0.3); }
+.access-sep { color: rgba(255,255,255,0.4); }
+
+/* ============ TOP NAV ============ */
+#top-nav {
+  position: fixed; top: 28px; left:0; right:0; z-index:999;
+  background: var(--blanco);
+  border-bottom: 2px solid var(--rosa);
+  padding: 0 32px;
+  display: flex; align-items: center;
+  height: 64px;
+  box-shadow: var(--shadow);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.logo-badge {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--azul), var(--rosa));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 900;
+  font-family: var(--font-display); font-size: 16px;
+}
+.logo-text { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--azul); line-height: 1.1; }
+.logo-text span { color: var(--rosa); }
+
+.nav-links {
+  display: flex; align-items: center; gap: 2px;
+  margin-left: auto;
+  list-style: none;
+}
+.nav-links li { position: relative; }
+.nav-links > li > a, .nav-links > li > button {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 14px;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none; background: none;
+  cursor: pointer; font-family: var(--font-body);
+  transition: var(--transition);
+}
+.nav-links > li > a:hover, .nav-links > li > button:hover,
+.nav-links > li > a.active {
+  background: var(--azul-light);
+  color: var(--azul);
+}
+.nav-links > li > a.active { font-weight: 600; }
+
+.dropdown-menu {
+  position: absolute; top: 100%; left: 0;
+  background: var(--blanco);
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(-8px);
+  transition: var(--transition);
+  z-index: 100;
+}
+.nav-links li:hover .dropdown-menu {
+  opacity: 1; visibility: visible; pointer-events: all;
+  transform: translateY(0);
+}
+.dropdown-menu a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  color: var(--text-med);
+  text-decoration: none; font-size: 13px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.dropdown-menu a:hover { background: var(--azul-light); color: var(--azul); }
+
+.nav-admin-btn {
+  margin-left: 16px;
+  background: var(--azul);
+  color: #fff !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+.nav-admin-btn:hover { background: var(--azul-dark) !important; color: #fff !important; }
+
+/* ============ MAIN CONTENT ============ */
+#app {
+  position: fixed;
+  top: 92px; left:0; right:0; bottom:0;
+  overflow: hidden;
+}
+.page { display:none; width:100%; height:100%; overflow:hidden; }
+.page.active { display:flex; }
+
+/* ============ HERO PAGE ============ */
+#page-home {
+  position:relative;
+  background: linear-gradient(135deg, #e8e8ff 0%, #ffe0f0 50%, #e8e8ff 100%);
+  overflow: hidden;
+}
+.hero-bg-pattern {
+  position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0,0,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,105,180,0.1) 0%, transparent 50%);
+}
+.hero-content {
+  position:relative; z-index:2;
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; height:100%;
+  padding: 40px 64px;
+  gap: 48px;
+}
+.hero-left { flex: 1; max-width: 600px; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,0,255,0.08);
+  border: 1px solid rgba(0,0,255,0.2);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 12px; font-weight: 500; color: var(--azul);
+  margin-bottom: 24px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.hero-tag::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--rosa); }
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+.hero-title .hl-rosa { color: var(--rosa); }
+.hero-title .hl-azul { color: var(--azul); }
+.hero-sub {
+  font-size: 16px; color: var(--text-med);
+  line-height: 1.7; margin-bottom: 36px;
+  max-width: 480px;
+}
+.hero-btns { display:flex; gap: 14px; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--azul);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600;
+  font-family: var(--font-body);
+  transition: var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary:hover { background: var(--azul-dark); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.btn-secondary {
+  background: var(--rosa);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600;
+  font-family: var(--font-body);
+  transition: var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-secondary:hover { background: var(--rosa-dark); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-med);
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 2px solid var(--gris-med); cursor: pointer;
+  font-size: 14px; font-weight: 500;
+  font-family: var(--font-body);
+  transition: var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-ghost:hover { border-color: var(--azul); color: var(--azul); }
+
+.hero-right {
+  flex: 1; max-width: 500px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.hero-card {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.9);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.hero-card:hover { transform: scale(1.04) translateY(-4px); box-shadow: var(--shadow-hover); }
+.hero-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 10px;
+}
+.hero-card h4 { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+.hero-card p { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+.hero-card.span2 { grid-column: span 2; display:flex; align-items:center; gap:16px; }
+.hero-card.span2 .hero-card-icon { flex-shrink:0; }
+.hero-stats { display:flex; gap:32px; margin-top:32px; }
+.stat-item { text-align:center; }
+.stat-num { font-family: var(--font-display); font-size: 32px; font-weight: 900; }
+.stat-lbl { font-size: 12px; color: var(--text-light); }
+
+/* ============ FULL PAGE SCROLL SECTIONS ============ */
+.full-page {
+  width:100%; height:100%;
+  overflow-y: auto;
+  padding: 40px 48px;
+}
+.full-page::-webkit-scrollbar { width: 6px; }
+.full-page::-webkit-scrollbar-track { background: var(--gris); }
+.full-page::-webkit-scrollbar-thumb { background: var(--rosa); border-radius: 3px; }
+
+.section-header {
+  margin-bottom: 40px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 900; color: var(--text-dark);
+}
+.section-title span { color: var(--rosa); }
+.section-sub { font-size: 15px; color: var(--text-light); margin-top: 6px; }
+.section-line {
+  height: 4px; width: 60px;
+  background: linear-gradient(to right, var(--azul), var(--rosa));
+  border-radius: 2px; margin-top: 12px;
+}
+
+/* INFO CARDS GRID */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.info-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.info-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(to right, var(--azul), var(--rosa));
+}
+.info-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+.info-card-icon { font-size: 32px; margin-bottom: 12px; }
+.info-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
+.info-card p { font-size: 13px; color: var(--text-med); line-height: 1.6; }
+
+/* PERSON CARD */
+.person-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.person-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align:center;
+  transition: var(--transition);
+}
+.person-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+.person-card:hover .person-avatar { transform: scale(1.08); }
+.person-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff;
+  transition: var(--transition);
+}
+.person-card h4 { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+.person-card .role { font-size: 12px; color: var(--rosa); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.person-card .bio { font-size: 12px; color: var(--text-light); line-height: 1.5; margin-bottom: 12px; }
+.download-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--azul); font-size: 12px; font-weight: 500;
+  text-decoration: none; padding: 6px 12px;
+  border: 1px solid var(--azul-light);
+  border-radius: 100px;
+  transition: var(--transition);
+}
+.download-link:hover { background: var(--azul); color: #fff; }
+
+/* TABS */
+.tab-container { margin-bottom: 24px; }
+.tab-bar {
+  display: flex; gap: 4px;
+  background: var(--gris);
+  border-radius: 12px;
+  padding: 4px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none; background: none;
+  cursor: pointer; font-family: var(--font-body);
+  font-size: 13px; font-weight: 500;
+  color: var(--text-light);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.tab-btn.active { background: var(--blanco); color: var(--azul); box-shadow: 0 2px 8px rgba(0,0,255,0.1); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ZONES */
+.zone-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.zone-card {
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative; overflow: hidden;
+  cursor: pointer; transition: var(--transition);
+}
+.zone-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.zone-num {
+  font-family: var(--font-display);
+  font-size: 80px; font-weight: 900;
+  position: absolute; right: 20px; bottom: -10px;
+  opacity: 0.15; line-height: 1;
+}
+.zone-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.zone-card p { font-size: 13px; line-height: 1.6; opacity: 0.85; }
+.zone-tag {
+  display: inline-block; padding: 4px 10px;
+  border-radius: 100px; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* MAP PLACEHOLDER */
+.map-placeholder {
+  background: var(--azul-light);
+  border: 2px dashed var(--azul);
+  border-radius: var(--radius);
+  height: 280px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  color: var(--azul); font-size: 15px; font-weight: 500;
+}
+.map-placeholder .map-icon { font-size: 48px; }
+
+/* BOLETIN */
+.boletin-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+.boletin-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+}
+.boletin-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+.boletin-cover {
+  height: 180px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+}
+.boletin-info { padding: 16px; }
+.boletin-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.boletin-info .date { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
+
+/* CONTACT FORM */
+.contact-layout { display:grid; grid-template-columns: 1fr 1.2fr; gap: 40px; height: 100%; }
+.contact-info h2 { font-family: var(--font-display); font-size: 28px; font-weight: 900; margin-bottom: 16px; }
+.contact-info p { font-size: 14px; color: var(--text-med); line-height: 1.7; margin-bottom: 24px; }
+.contact-detail {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--gris-med);
+  font-size: 14px; color: var(--text-med);
+}
+.contact-icon { font-size: 20px; }
+.form-field { margin-bottom: 16px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-med); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  border: 2px solid var(--gris-med);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px; font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--blanco);
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--azul); }
+.form-textarea { height: 100px; resize: none; }
+.form-row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* HISTORY TIMELINE */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before {
+  content:''; position:absolute; left:12px; top:0; bottom:0;
+  width: 2px; background: linear-gradient(to bottom, var(--azul), var(--rosa));
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-dot {
+  position: absolute; left: -40px; top: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 3px solid var(--blanco);
+  box-shadow: 0 0 0 2px var(--azul);
+}
+.timeline-year {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 24px; color: var(--azul); margin-bottom: 6px;
+}
+.timeline-title { font-size: 16px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+.timeline-desc { font-size: 13px; color: var(--text-med); line-height: 1.6; }
+
+/* FAQ */
+.faq-item {
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+.faq-item.open { border-color: var(--azul); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-size: 14px; font-weight: 600; color: var(--text-dark);
+  background: var(--blanco);
+  transition: var(--transition);
+}
+.faq-q:hover { background: var(--azul-light); }
+.faq-item.open .faq-q { background: var(--azul); color: #fff; }
+.faq-chevron { transition: transform 0.3s; font-size: 12px; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+  font-size: 13px; color: var(--text-med); line-height: 1.7;
+}
+.faq-item.open .faq-a { max-height: 200px; padding: 16px 20px; }
+
+/* ORGANIGRAMA */
+.org-container { overflow-x: auto; min-height: 400px; padding: 20px 0; }
+.org-level { display:flex; justify-content:center; gap: 16px; margin-bottom: 32px; position:relative; }
+.org-node {
+  background: var(--blanco);
+  border: 2px solid var(--azul);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  text-align: center;
+  min-width: 120px;
+  font-size: 12px; font-weight: 600; color: var(--azul);
+  position: relative;
+  transition: var(--transition);
+}
+.org-node:hover { background: var(--azul); color: #fff; }
+.org-node.root { background: var(--azul); color: #fff; border-color: var(--azul-dark); font-size: 14px; min-width: 160px; }
+.org-node.pink { border-color: var(--rosa); color: var(--rosa); }
+.org-node.pink:hover { background: var(--rosa); color: #fff; }
+.org-connector { text-align: center; color: var(--text-light); font-size: 20px; margin-bottom: -16px; }
+
+/* SOCIAL LINKS */
+.social-grid { display:flex; gap: 16px; flex-wrap: wrap; }
+.social-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px 24px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-size: 14px; font-weight: 600;
+  transition: var(--transition);
+  flex: 1; min-width: 180px;
+}
+.social-link:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.social-icon { font-size: 28px; }
+
+/* ============ ADMIN DASHBOARD ============ */
+#page-admin {
+  flex-direction: row;
+}
+.admin-sidebar {
+  width: 240px; min-width: 240px;
+  background: var(--azul);
+  color: #fff;
+  display: flex; flex-direction: column;
+  padding: 0;
+  overflow-y: auto;
+}
+.admin-logo {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.admin-logo h2 { font-family: var(--font-display); font-size: 16px; font-weight: 700; }
+.admin-logo p { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+.admin-nav { padding: 16px 12px; flex:1; }
+.admin-nav-section { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); text-transform: uppercase; padding: 8px 8px 4px; margin-top: 12px; }
+.admin-nav-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 10px 12px;
+  border-radius: 8px;
+  border: none; background: none;
+  cursor: pointer; font-family: var(--font-body);
+  font-size: 13px; color: rgba(255,255,255,0.75);
+  transition: var(--transition);
+  text-align: left; margin-bottom: 2px;
+}
+.admin-nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.admin-nav-btn.active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 600; }
+.admin-nav-icon { font-size: 16px; opacity: 0.8; }
+.admin-exit {
+  padding: 16px 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.admin-exit button {
+  width: 100%; padding: 10px;
+  border-radius: 8px; border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,105,180,0.2); color: var(--rosa-light);
+  cursor: pointer; font-family: var(--font-body); font-size: 13px;
+  transition: var(--transition);
+}
+.admin-exit button:hover { background: var(--rosa); color: #fff; }
+
+.admin-main {
+  flex: 1; background: var(--gris); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.admin-topbar {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--gris-med);
+  padding: 16px 32px;
+  display: flex; align-items: center; gap: 16px;
+}
+.admin-topbar h1 { font-family: var(--font-display); font-size: 22px; font-weight: 900; flex:1; }
+.admin-user-badge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; background: var(--azul-light);
+  border-radius: 100px; font-size: 12px; color: var(--azul); font-weight: 600;
+}
+.admin-content { flex:1; overflow-y: auto; padding: 32px; }
+.admin-content::-webkit-scrollbar { width: 6px; }
+.admin-content::-webkit-scrollbar-thumb { background: var(--gris-med); border-radius: 3px; }
+
+/* ADMIN PANELS */
+.admin-panel { display:none; }
+.admin-panel.active { display:block; }
+
+.stats-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--gris-med);
+  position: relative; overflow: hidden;
+}
+.stat-card::after {
+  content:''; position:absolute; top:0; right:0; bottom:0;
+  width: 4px;
+}
+.stat-card.blue::after { background: var(--azul); }
+.stat-card.pink::after { background: var(--rosa); }
+.stat-card.green::after { background: #22c55e; }
+.stat-card.amber::after { background: #f59e0b; }
+.stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--text-dark); }
+.stat-label { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+.stat-delta { font-size: 11px; color: #22c55e; margin-top: 8px; font-weight: 600; }
+.stat-delta.neg { color: #ef4444; }
+
+.chart-placeholder {
+  background: var(--blanco); border: 1px solid var(--gris-med);
+  border-radius: var(--radius); padding: 24px;
+  display: flex; align-items: flex-end; gap: 8px;
+  height: 180px;
+}
+.chart-bar {
+  flex: 1; border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, var(--azul), var(--rosa));
+  transition: var(--transition); cursor: pointer;
+}
+.chart-bar:hover { opacity: 0.8; transform: scaleY(1.05); transform-origin: bottom; }
+
+.admin-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+.admin-card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-med);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.admin-card h3 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
+.admin-card h3 span { font-size: 18px; }
+
+.list-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid var(--gris);
+  font-size: 13px; color: var(--text-med);
+}
+.list-item:last-child { border-bottom: none; }
+.list-item-left { display:flex; align-items:center; gap: 10px; }
+.list-dot { width: 8px; height: 8px; border-radius: 50%; }
+.badge {
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-blue { background: var(--azul-light); color: var(--azul); }
+.badge-pink { background: var(--rosa-light); color: var(--rosa-dark); }
+.badge-green { background: #dcfce7; color: #166534; }
+
+/* ADMIN TABLE */
+.admin-table { width:100%; border-collapse: collapse; }
+.admin-table th {
+  background: var(--gris); padding: 10px 16px;
+  text-align: left; font-size: 11px; font-weight: 700;
+  color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;
+}
+.admin-table td { padding: 12px 16px; font-size: 13px; color: var(--text-med); border-bottom: 1px solid var(--gris); }
+.admin-table tr:hover td { background: var(--azul-light); }
+
+/* TOGGLE SWITCH */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--gris);
+  font-size: 13px; color: var(--text-dark);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle {
+  position: relative; width: 40px; height: 22px;
+  cursor: pointer;
+}
+.toggle input { opacity: 0; width:0; height:0; }
+.toggle-slider {
+  position: absolute; inset: 0;
+  background: var(--gris-med); border-radius: 11px;
+  transition: 0.3s;
+}
+.toggle-slider::before {
+  content:''; position:absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  left: 3px; top: 3px; background: #fff;
+  transition: 0.3s;
+}
+.toggle input:checked + .toggle-slider { background: var(--azul); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+/* UPLOAD AREA */
+.upload-area {
+  border: 2px dashed var(--gris-med);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.upload-area:hover { border-color: var(--azul); background: var(--azul-light); }
+.upload-area p { font-size: 13px; color: var(--text-light); margin-top: 8px; }
+
+/* LOGIN */
+#login-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, var(--azul), #4400aa);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-box {
+  background: var(--blanco);
+  border-radius: 24px;
+  padding: 48px;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+}
+.login-logo { text-align: center; margin-bottom: 32px; }
+.login-logo .badge { font-size: 32px; }
+.login-logo h2 { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: var(--azul); margin-top: 8px; }
+.login-logo p { font-size: 13px; color: var(--text-light); }
+.login-error { background: #fee2e2; color: #dc2626; padding: 10px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display:none; }
+
+/* FOOTER */
+footer {
+  background: var(--azul);
+  color: rgba(255,255,255,0.85);
+  padding: 32px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.footer-brand h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.footer-brand p { font-size: 12px; }
+.footer-socials { display:flex; gap: 12px; }
+.footer-social {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; text-decoration: none; font-size: 16px;
+  transition: var(--transition);
+}
+.footer-social:hover { background: var(--rosa); }
+.footer-copy { font-size: 11px; text-align: right; }
+
+/* RESPONSIVE TWEAKS */
+@media (max-width: 900px) {
+  .hero-content { flex-direction: column; padding: 24px; }
+  .hero-right { display: none; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .zone-grid { grid-template-columns: 1fr; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .admin-grid { grid-template-columns: 1fr; }
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from { opacity:0; transform: translateY(20px); }
+  to { opacity:1; transform: translateY(0); }
+}
+.page.active .hero-left > * { animation: fadeInUp 0.5s ease both; }
+.page.active .hero-left > *:nth-child(2) { animation-delay: 0.1s; }
+.page.active .hero-left > *:nth-child(3) { animation-delay: 0.2s; }
+.page.active .hero-left > *:nth-child(4) { animation-delay: 0.3s; }
+
+.high-contrast body {
+  background: #000 !important; color: #fff !important;
+}
+.high-contrast .info-card, .high-contrast .hero-card {
+  background: #111 !important; border-color: #ff0 !important; color: #fff !important;
+}
+</style>
+</head>
+<body>
+
+<!-- ======= LOGIN OVERLAY ======= -->
+<div id="login-overlay" style="display:none;">
+  <div class="login-box">
+    <div class="login-logo">
+      <div style="font-size:48px;">✝️</div>
+      <h2>Panel Administrador</h2>
+      <p>Pastoral Juvenil Luqueña</p>
+    </div>
+    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+    <div class="form-field">
+      <label class="form-label">Usuario</label>
+      <input type="text" class="form-input" id="login-user" placeholder="admin@pjl.org.py">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="••••••••">
+    </div>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px;" onclick="doLogin()">Ingresar al Panel</button>
+    <button class="btn-ghost" style="width:100%;justify-content:center;margin-top:8px;" onclick="closeLogin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- ======= ACCESSIBILITY BAR ======= -->
+<div id="access-bar">
+  <span>♿ Accesibilidad:</span>
+  <button class="access-btn" onclick="changeFont(1)">A+</button>
+  <button class="access-btn" onclick="changeFont(-1)">A−</button>
+  <span class="access-sep">|</span>
+  <button class="access-btn" onclick="toggleContrast()">Alto Contraste</button>
+  <span class="access-sep">|</span>
+  <button class="access-btn">🌐 ES</button>
+  <button class="access-btn" style="margin-left:auto;">🔍 Buscar</button>
+</div>
+
+<!-- ======= TOP NAV ======= -->
+<nav id="top-nav">
+  <a class="nav-logo" href="#" onclick="showPage('home')">
+    <div class="logo-badge">PJL</div>
+    <div>
+      <div class="logo-text">Pastoral <span>Juvenil</span></div>
+      <div style="font-size:10px;color:var(--text-light);font-weight:500;">Luqueña · Luque, Paraguay</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active" id="nav-home" onclick="showPage('home');return false;">Inicio</a></li>
+    <li>
+      <button>Nosotros ▾</button>
+      <div class="dropdown-menu">
+        <a href="#" onclick="showPage('info');return false;">📋 Misión y Visión</a>
+        <a href="#" onclick="showPage('historia');return false;">📖 Historia PJL</a>
+        <a href="#" onclick="showPage('organigrama');return false;">🗂️ Organigrama</a>
+      </div>
+    </li>
+    <li>
+      <button>Zonas ▾</button>
+      <div class="dropdown-menu">
+        <a href="#" onclick="showZona(1);showPage('zonas');return false;">📍 Zona 1</a>
+        <a href="#" onclick="showZona(2);showPage('zonas');return false;">📍 Zona 2</a>
+        <a href="#" onclick="showZona(3);showPage('zonas');return false;">📍 Zona 3</a>
+        <a href="#" onclick="showZona(4);showPage('zonas');return false;">📍 Zona 4</a>
+      </div>
+    </li>
+    <li><a href="#" onclick="showPage('consejo');return false;">Consejo PJL</a></li>
+    <li><a href="#" onclick="showPage('boletin');return false;">Boletín</a></li>
+    <li><a href="#" onclick="showPage('faq');return false;">FAQ</a></li>
+    <li><a href="#" onclick="showPage('contacto');return false;">Contacto</a></li>
+    <button class="nav-admin-btn" onclick="openLogin()">⚙️ Admin</button>
+  </ul>
+</nav>
+
+<!-- ======= APP PAGES ======= -->
+<div id="app">
+
+  <!-- ===== HOME ===== -->
+  <div class="page active" id="page-home">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-tag">✝ Comunidad · Fe · Juventud</div>
+        <h1 class="hero-title">
+          Pastoral<br>
+          <span class="hl-rosa">Juvenil</span><br>
+          <span class="hl-azul">Luqueña</span>
+        </h1>
+        <p class="hero-sub">
+          Somos jóvenes comprometidos con la fe, la comunidad y el crecimiento personal. La PJL reúne a las comunidades juveniles parroquiales de Luque, Paraguay, animadas por el Espíritu Santo.
+        </p>
+        <div class="hero-btns">
+          <a class="btn-primary" href="#" onclick="showPage('info');return false;">Conocé la PJL →</a>
+          <a class="btn-secondary" href="#" onclick="showPage('contacto');return false;">Unirme ahora</a>
+          <a class="btn-ghost" href="#" onclick="showPage('boletin');return false;">📥 Boletín</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-num" style="color:var(--azul);">4</div><div class="stat-lbl">Zonas</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--rosa);">12+</div><div class="stat-lbl">Capillas</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--azul);">300+</div><div class="stat-lbl">Jóvenes</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:var(--rosa);">20+</div><div class="stat-lbl">Años</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card" onclick="showPage('info')">
+          <div class="hero-card-icon" style="background:var(--azul-light);">✝️</div>
+          <h4>Fe y Comunidad</h4>
+          <p>Vivir el Evangelio en comunidad juvenil activa y dinámica</p>
+        </div>
+        <div class="hero-card" onclick="showPage('zonas')">
+          <div class="hero-card-icon" style="background:var(--rosa-light);">📍</div>
+          <h4>4 Zonas Activas</h4>
+          <p>Capillas y comunidades en todo el municipio de Luque</p>
+        </div>
+        <div class="hero-card" onclick="showPage('consejo')">
+          <div class="hero-card-icon" style="background:#e0ffe8;">👥</div>
+          <h4>Consejo PJL</h4>
+          <p>EFO, ECOMU, ELI, MMPJL y coordinadores de zonas</p>
+        </div>
+        <div class="hero-card" onclick="showPage('boletin')">
+          <div class="hero-card-icon" style="background:#fff3e0;">📰</div>
+          <h4>Boletín Mensual</h4>
+          <p>Revista digital con novedades, formación y actividades</p>
+        </div>
+        <div class="hero-card span2" onclick="showPage('contacto')">
+          <div class="hero-card-icon" style="background:var(--rosa-light);">✉️</div>
+          <div>
+            <h4>¿Querés ser parte?</h4>
+            <p>Contactanos y te informamos cómo unirte a la comunidad</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INFO INSTITUCIONAL ===== -->
+  <div class="page" id="page-info">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Quiénes <span>Somos</span></div>
+          <div class="section-sub">Misión, visión, valores y objetivos de la Pastoral Juvenil Luqueña</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="cards-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🎯</div>
+          <h3>Misión</h3>
+          <p>Anunciar el Evangelio de Jesucristo a los jóvenes de Luque, acompañándolos en su crecimiento integral — espiritual, humano y social — a través de la comunidad eclesial y el servicio a los demás.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🌟</div>
+          <h3>Visión</h3>
+          <p>Ser una Pastoral Juvenil viva, misionera y profética, que transforma la realidad de Luque desde los valores del Evangelio, formando jóvenes líderes comprometidos con la Iglesia y la sociedad.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">💎</div>
+          <h3>Valores</h3>
+          <p>Fe auténtica · Fraternidad · Servicio · Alegría · Creatividad · Compromiso social · Amor a la Iglesia · Respeto a la diversidad</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📌</div>
+          <h3>Objetivos</h3>
+          <p>Acompañar el proceso de fe de los jóvenes; promover la formación integral; articular acciones entre capillas y comunidades; y fortalecer la corresponsabilidad pastoral en la parroquia.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🏛️</div>
+          <h3>Parroquia</h3>
+          <p>La PJL nace en el seno de la Parroquia de Luque, acompañada por sacerdotes, religiosos y laicos comprometidos con la juventud local y su formación cristiana.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📅</div>
+          <h3>Calendario Pastoral</h3>
+          <p>Retiros, convivencias, encuentros de zona, jornadas de formación, celebraciones litúrgicas, actividades sociales y misiones comunitarias durante todo el año.</p>
+        </div>
+      </div>
+      <div class="map-placeholder" style="margin-top:32px;">
+        <div class="map-icon">🗺️</div>
+        <div>Mapa de Capillas — Luque, Paraguay</div>
+        <small style="color:var(--azul);opacity:0.7;">Integrar Google Maps API con ubicaciones de capillas y comunidades</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ZONAS ===== -->
+  <div class="page" id="page-zonas">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Zonas y <span>Capillas</span></div>
+          <div class="section-sub">4 zonas pastorales · Comunidades activas y en nucleación</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="tab-container">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="showZonaTab(1,this)">Zona 1</button>
+          <button class="tab-btn" onclick="showZonaTab(2,this)">Zona 2</button>
+          <button class="tab-btn" onclick="showZonaTab(3,this)">Zona 3</button>
+          <button class="tab-btn" onclick="showZonaTab(4,this)">Zona 4</button>
+          <button class="tab-btn" onclick="showZonaTab(5,this)">Todas las Capillas</button>
+        </div>
+      </div>
+      <div class="tab-panel active" id="zona-panel-1">
+        <div class="zone-grid">
+          <div class="zone-card" style="background:linear-gradient(135deg,var(--azul-light),#c8c8ff);color:var(--azul-dark);">
+            <span class="zone-tag" style="background:var(--azul);color:#fff;">Zona 1</span>
+            <h3>Centro Norte</h3>
+            <p>Capillas del sector norte y centro de Luque. Comunidades activas con grupos juveniles consolidados y actividades regulares.</p>
+            <div class="zone-num">1</div>
+          </div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San José</h3><p>Comunidad activa · Zona 1 · Coordinador: Prof. Juan Sánchez</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Santa Rosa</h3><p>Comunidad activa · Zona 1 · Proceso de formación avanzado</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Francisco</h3><p>En nucleación · Zona 1 · Recientemente incorporada</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="zona-panel-2">
+        <div class="zone-grid">
+          <div class="zone-card" style="background:linear-gradient(135deg,var(--rosa-light),#ffb8d8);color:#8b0057;">
+            <span class="zone-tag" style="background:var(--rosa);color:#fff;">Zona 2</span>
+            <h3>Sur Parroquial</h3>
+            <p>Comunidades del sector sur con fuerte vocación misionera y proyección social en barrios vulnerables.</p>
+            <div class="zone-num">2</div>
+          </div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Corazón de Jesús</h3><p>Comunidad activa · Zona 2 · Grupo numeroso de jóvenes</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Virgen del Carmen</h3><p>Comunidad activa · Zona 2 · Actividades de misión</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Roque</h3><p>En nucleación · Zona 2</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="zona-panel-3">
+        <div class="zone-grid">
+          <div class="zone-card" style="background:linear-gradient(135deg,#e0ffe8,#a8eab8);color:#165830;">
+            <span class="zone-tag" style="background:#22c55e;color:#fff;">Zona 3</span>
+            <h3>Este Rural</h3>
+            <p>Capillas de las zonas rurales del este con identidad propia y tradición pastoral profunda.</p>
+            <div class="zone-num">3</div>
+          </div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San Isidro</h3><p>Comunidad activa · Zona 3</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San Lorenzo</h3><p>Comunidad activa · Zona 3</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="zona-panel-4">
+        <div class="zone-grid">
+          <div class="zone-card" style="background:linear-gradient(135deg,#fff3e0,#ffd8a0);color:#7c4a00;">
+            <span class="zone-tag" style="background:#f59e0b;color:#fff;">Zona 4</span>
+            <h3>Oeste Barrial</h3>
+            <p>Comunidades barriales del oeste con proyectos sociales activos y jóvenes comprometidos.</p>
+            <div class="zone-num">4</div>
+          </div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Santo Tomás</h3><p>Comunidad activa · Zona 4</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Inmaculada</h3><p>Comunidad activa · Zona 4 · Grupo de jóvenes en formación</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Ignacio</h3><p>En nucleación · Zona 4</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" id="zona-panel-5">
+        <div class="cards-grid">
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San José</h3><p>Zona 1 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Santa Rosa</h3><p>Zona 1 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Corazón de Jesús</h3><p>Zona 2 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Virgen del Carmen</h3><p>Zona 2 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San Isidro</h3><p>Zona 3 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla San Lorenzo</h3><p>Zona 3 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Santo Tomás</h3><p>Zona 4 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">⛪</div><h3>Capilla Inmaculada</h3><p>Zona 4 · Activa</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Francisco</h3><p>Zona 1 · En nucleación</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Roque</h3><p>Zona 2 · En nucleación</p></div>
+          <div class="info-card"><div class="info-card-icon">🔵</div><h3>Com. San Ignacio</h3><p>Zona 4 · En nucleación</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONSEJO PJL ===== -->
+  <div class="page" id="page-consejo">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Consejo <span>PJL</span></div>
+          <div class="section-sub">Equipos, coordinaciones y representantes</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="tab-container">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="showConsejoTab('efo',this)">EFO</button>
+          <button class="tab-btn" onclick="showConsejoTab('ecomu',this)">ECOMU</button>
+          <button class="tab-btn" onclick="showConsejoTab('eli',this)">ELI</button>
+          <button class="tab-btn" onclick="showConsejoTab('mmpjl',this)">MMPJL</button>
+          <button class="tab-btn" onclick="showConsejoTab('coord',this)">Coordinadores de Zonas</button>
+        </div>
+      </div>
+      <div id="consejo-efo" class="tab-panel active">
+        <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Equipo de Formación y Organización — responsable de la formación integral de los jóvenes y la planificación pastoral.</p>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,var(--azul),var(--rosa));">MA</div>
+            <h4>María Aparecida González</h4>
+            <div class="role">Coordinadora EFO</div>
+            <div class="bio">Referente en formación catequética. 8 años en pastoral juvenil. Profesora de Religión.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#2244ff,#ff44aa);">CR</div>
+            <h4>Carlos Rodrigo Benítez</h4>
+            <div class="role">Sub-Coordinador EFO</div>
+            <div class="bio">Especialista en talleres de espiritualidad y dinamicas grupales.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,var(--rosa),#aa00ff);">LP</div>
+            <h4>Luciana Pérez</h4>
+            <div class="role">Coordinadora de Formación</div>
+            <div class="bio">Catequista con experiencia en grupos de pre-confirmación y confirmación.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+        </div>
+      </div>
+      <div id="consejo-ecomu" class="tab-panel">
+        <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Equipo de Comunicación — gestión de redes sociales, boletín y comunicación institucional.</p>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#ff69b4,#ff0066);">VR</div>
+            <h4>Valentina Rodas</h4>
+            <div class="role">Coordinadora ECOMU</div>
+            <div class="bio">Diseñadora gráfica y comunicadora pastoral. Responsable del boletín mensual.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#0055ff,#0099ff);">DM</div>
+            <h4>Diego Mora</h4>
+            <div class="role">Redes Sociales</div>
+            <div class="bio">Creador de contenido digital. Maneja Instagram, TikTok y canales oficiales.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+        </div>
+      </div>
+      <div id="consejo-eli" class="tab-panel">
+        <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Equipo de Liturgia — animación y coordinación de las celebraciones litúrgicas de la PJL.</p>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#22c55e,#0099ff);">AS</div>
+            <h4>Ana Sonia Villalba</h4>
+            <div class="role">Coordinadora ELI</div>
+            <div class="bio">Animadora litúrgica con formación en música sacra y canto gregoriano.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+        </div>
+      </div>
+      <div id="consejo-mmpjl" class="tab-panel">
+        <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Movimiento Misionero — coordinación de misiones, actividades de proyección social y servicio.</p>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">FG</div>
+            <h4>Fernando García López</h4>
+            <div class="role">Coord. MMPJL</div>
+            <div class="bio">Coordinador de misiones rurales y actividades sociales en comunidades vulnerables.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+        </div>
+      </div>
+      <div id="consejo-coord" class="tab-panel">
+        <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Coordinadores responsables de articular las actividades pastorales en cada zona territorial.</p>
+        <div class="person-grid">
+          <div class="person-card">
+            <div class="person-avatar" style="background:var(--azul);">Z1</div>
+            <h4>Rodrigo Almada</h4>
+            <div class="role">Coordinador Zona 1</div>
+            <div class="bio">Responsable de las capillas del centro norte.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:var(--rosa);">Z2</div>
+            <h4>Patricia Méndez</h4>
+            <div class="role">Coordinadora Zona 2</div>
+            <div class="bio">Referente del sector sur parroquial.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:#22c55e;">Z3</div>
+            <h4>Julio César Benítez</h4>
+            <div class="role">Coordinador Zona 3</div>
+            <div class="bio">Responsable de las comunidades rurales del este.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar" style="background:#f59e0b;">Z4</div>
+            <h4>Rosa Elena Vera</h4>
+            <div class="role">Coordinadora Zona 4</div>
+            <div class="bio">Animadora de las comunidades del oeste.</div>
+            <a href="#" class="download-link">📄 Currículum Pastoral</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOLETÍN ===== -->
+  <div class="page" id="page-boletin">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Boletín <span>Mensual</span></div>
+          <div class="section-sub">Revista digital de la Pastoral Juvenil Luqueña</div>
+          <div class="section-line"></div>
+        </div>
+        <button class="btn-primary">📧 Suscribirme</button>
+      </div>
+      <div class="boletin-grid">
+        <div class="boletin-card">
+          <div class="boletin-cover" style="background:linear-gradient(135deg,var(--azul),var(--rosa));">📖</div>
+          <div class="boletin-info">
+            <h4>Edición Marzo 2026</h4>
+            <div class="date">📅 Marzo 2026 · Último número</div>
+            <a href="#" class="btn-primary" style="font-size:12px;padding:8px 14px;">📥 Descargar PDF</a>
+          </div>
+        </div>
+        <div class="boletin-card">
+          <div class="boletin-cover" style="background:linear-gradient(135deg,var(--rosa),#aa00ff);">📰</div>
+          <div class="boletin-info">
+            <h4>Edición Febrero 2026</h4>
+            <div class="date">📅 Febrero 2026</div>
+            <a href="#" class="download-link">📥 Descargar</a>
+          </div>
+        </div>
+        <div class="boletin-card">
+          <div class="boletin-cover" style="background:linear-gradient(135deg,#22c55e,#0099ff);">📝</div>
+          <div class="boletin-info">
+            <h4>Edición Enero 2026</h4>
+            <div class="date">📅 Enero 2026</div>
+            <a href="#" class="download-link">📥 Descargar</a>
+          </div>
+        </div>
+        <div class="boletin-card">
+          <div class="boletin-cover" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">🎄</div>
+          <div class="boletin-info">
+            <h4>Edición Diciembre 2025</h4>
+            <div class="date">📅 Diciembre 2025 · Navidad</div>
+            <a href="#" class="download-link">📥 Descargar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORIA ===== -->
+  <div class="page" id="page-historia">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Historia <span>PJL</span></div>
+          <div class="section-sub">Reseña histórica de la Pastoral Juvenil Luqueña y la Parroquia</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--azul);"></div>
+          <div class="timeline-year">2004</div>
+          <div class="timeline-title">Fundación de la Pastoral Juvenil Luqueña</div>
+          <div class="timeline-desc">Nace la PJL como respuesta pastoral a las necesidades de los jóvenes de Luque. Primeros grupos en tres capillas del centro parroquial.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--rosa);"></div>
+          <div class="timeline-year">2008</div>
+          <div class="timeline-title">Primera Asamblea Diocesana</div>
+          <div class="timeline-desc">La PJL Luqueña participa como comunidad organizada en la Asamblea Diocesana de Pastoral Juvenil, presentando su plan de formación.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--azul);"></div>
+          <div class="timeline-year">2012</div>
+          <div class="timeline-title">Primer Campamento Zonal</div>
+          <div class="timeline-desc">Se realiza el primer campamento que reúne a las 4 zonas por primera vez, marcando un hito en la articulación territorial de la PJL.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--rosa);"></div>
+          <div class="timeline-year">2016</div>
+          <div class="timeline-title">Creación del Consejo PJL</div>
+          <div class="timeline-desc">Se estructura formalmente el Consejo con los equipos EFO, ECOMU, ELI y MMPJL, consolidando la gobernanza participativa de la pastoral.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--azul);"></div>
+          <div class="timeline-year">2020</div>
+          <div class="timeline-title">Pastoral en Pandemia</div>
+          <div class="timeline-desc">La PJL adapta sus actividades al formato virtual, manteniendo la comunidad activa con encuentros online y el boletín digital mensual.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--rosa);"></div>
+          <div class="timeline-year">2024</div>
+          <div class="timeline-title">20 Años de la PJL</div>
+          <div class="timeline-desc">Gran celebración del XX Aniversario de la Pastoral Juvenil Luqueña, con la participación de jóvenes, familias, sacerdotes y la comunidad parroquial.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FAQ ===== -->
+  <div class="page" id="page-faq">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Preguntas <span>Frecuentes</span></div>
+          <div class="section-sub">Respuestas rápidas a las dudas más comunes</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div style="max-width:800px;">
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Quién puede participar en la Pastoral Juvenil Luqueña? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Cualquier joven de entre 14 y 29 años que pertenezca a alguna de las capillas o comunidades de Luque. También pueden participar jóvenes sin vinculación previa que deseen integrarse a la comunidad.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Cómo me puedo unir a la PJL? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Podés acercarte a la capilla más cercana de tu zona, completar el formulario de contacto en esta página, o escribirnos a nuestras redes sociales. Un coordinador te contactará para darte la bienvenida.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Cuándo son las reuniones y actividades? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Cada zona tiene su propio cronograma semanal. Las reuniones generales del Consejo PJL se realizan mensualmente. Los retiros y campamentos se anuncian con anticipación en el boletín y redes sociales.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Cómo descargo el boletín mensual? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Podés descargar el boletín desde la sección "Boletín" de esta página. Las ediciones anteriores también están disponibles para descarga gratuita en formato PDF.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Qué es el EFO, ECOMU, ELI y MMPJL? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Son los equipos del Consejo PJL: EFO (Formación y Organización), ECOMU (Comunicación), ELI (Liturgia) y MMPJL (Movimiento Misionero). Cada equipo tiene funciones específicas dentro de la pastoral.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">¿Puedo descargar el currículum pastoral de los coordinadores? <span class="faq-chevron">▼</span></div>
+          <div class="faq-a">Sí. En la sección "Consejo PJL" encontrás el perfil de cada coordinador con la opción de descargar su currículum pastoral en PDF.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ORGANIGRAMA ===== -->
+  <div class="page" id="page-organigrama">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Organigrama <span>PJL</span></div>
+          <div class="section-sub">Estructura organizativa de la Pastoral Juvenil Luqueña</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="org-container">
+        <div class="org-level">
+          <div class="org-node root">Parroquia / Párroco</div>
+        </div>
+        <div class="org-connector">│</div>
+        <div class="org-level">
+          <div class="org-node root">Asamblea PJL</div>
+        </div>
+        <div class="org-connector">│</div>
+        <div class="org-level">
+          <div class="org-node root" style="background:var(--rosa);border-color:var(--rosa-dark);">Consejo PJL</div>
+        </div>
+        <div class="org-connector">├──────────────────────────────┤</div>
+        <div class="org-level">
+          <div class="org-node">EFO<br><small style="font-weight:400;font-size:10px;">Formación</small></div>
+          <div class="org-node">ECOMU<br><small style="font-weight:400;font-size:10px;">Comunicación</small></div>
+          <div class="org-node">ELI<br><small style="font-weight:400;font-size:10px;">Liturgia</small></div>
+          <div class="org-node">MMPJL<br><small style="font-weight:400;font-size:10px;">Misiones</small></div>
+        </div>
+        <div class="org-connector">│</div>
+        <div class="org-level">
+          <div class="org-node pink">Coord. Zona 1</div>
+          <div class="org-node pink">Coord. Zona 2</div>
+          <div class="org-node pink">Coord. Zona 3</div>
+          <div class="org-node pink">Coord. Zona 4</div>
+        </div>
+        <div class="org-connector">│</div>
+        <div class="org-level" style="flex-wrap:wrap;gap:8px;">
+          <div class="org-node" style="min-width:90px;font-size:11px;">Capillas Z1</div>
+          <div class="org-node" style="min-width:90px;font-size:11px;">Capillas Z2</div>
+          <div class="org-node" style="min-width:90px;font-size:11px;">Capillas Z3</div>
+          <div class="org-node" style="min-width:90px;font-size:11px;">Capillas Z4</div>
+        </div>
+        <div class="org-connector">│</div>
+        <div class="org-level">
+          <div class="org-node" style="background:var(--rosa-light);color:var(--rosa-dark);border-color:var(--rosa);">Jóvenes PJL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONTACTO ===== -->
+  <div class="page" id="page-contacto">
+    <div class="full-page">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Escribinos</div>
+          <div class="section-line"></div>
+        </div>
+      </div>
+      <div class="contact-layout">
+        <div class="contact-info">
+          <h2>¿Cómo podemos<br><span style="color:var(--rosa);">ayudarte?</span></h2>
+          <p>Completá el formulario para consultas, inscripciones o solicitudes de información. Un miembro del equipo te responderá a la brevedad.</p>
+          <div class="contact-detail"><span class="contact-icon">📍</span> Parroquia de Luque, Paraguay</div>
+          <div class="contact-detail"><span class="contact-icon">✉️</span> pjl@parroquialuque.org.py</div>
+          <div class="contact-detail"><span class="contact-icon">📱</span> Instagram: @pjl_luque</div>
+          <div class="contact-detail"><span class="contact-icon">🎵</span> TikTok: @pastoraljuvenilluquena</div>
+          <div class="contact-detail"><span class="contact-icon">📅</span> Reuniones: Ver cronograma por zona</div>
+          <div class="social-grid" style="margin-top:24px;">
+            <a href="#" class="social-link" style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#f56040);color:#fff;">
+              <span class="social-icon">📸</span> Instagram
+            </a>
+            <a href="#" class="social-link" style="background:#000;color:#fff;">
+              <span class="social-icon">🎵</span> TikTok
+            </a>
+          </div>
+        </div>
+        <div>
+          <div style="background:var(--blanco);border:1px solid var(--gris-med);border-radius:var(--radius);padding:32px;">
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-input" placeholder="Tu nombre">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Apellido</label>
+                <input type="text" class="form-input" placeholder="Tu apellido">
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Correo electrónico</label>
+              <input type="email" class="form-input" placeholder="tucorreo@ejemplo.com">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Teléfono / WhatsApp</label>
+              <input type="tel" class="form-input" placeholder="+595 9...">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Motivo de consulta</label>
+              <select class="form-select">
+                <option>Quiero unirme a la PJL</option>
+                <option>Consulta sobre actividades</option>
+                <option>Solicitar información de zona</option>
+                <option>Inscripción a retiro / campamento</option>
+                <option>Descargar currículum pastoral</option>
+                <option>Otros</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Mensaje</label>
+              <textarea class="form-textarea" placeholder="Escribí tu consulta o mensaje..."></textarea>
+            </div>
+            <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitContact()">✉️ Enviar Mensaje</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN DASHBOARD ===== -->
+  <div class="page" id="page-admin">
+    <div class="admin-sidebar">
+      <div class="admin-logo">
+        <h2>✝ Panel PJL</h2>
+        <p>Administrador · v1.0</p>
+      </div>
+      <div class="admin-nav">
+        <div class="admin-nav-section">Principal</div>
+        <button class="admin-nav-btn active" onclick="showAdminPanel('dashboard',this)"><span class="admin-nav-icon">📊</span> Dashboard</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('contenido',this)"><span class="admin-nav-icon">📝</span> Contenido</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('actividades',this)"><span class="admin-nav-icon">📅</span> Actividades</button>
+        <div class="admin-nav-section">Recursos</div>
+        <button class="admin-nav-btn" onclick="showAdminPanel('documentos',this)"><span class="admin-nav-icon">📁</span> Documentos</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('galeria',this)"><span class="admin-nav-icon">🖼️</span> Galería</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('boletin_admin',this)"><span class="admin-nav-icon">📰</span> Boletín</button>
+        <div class="admin-nav-section">Gestión</div>
+        <button class="admin-nav-btn" onclick="showAdminPanel('usuarios',this)"><span class="admin-nav-icon">👥</span> Usuarios</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('secciones',this)"><span class="admin-nav-icon">🔧</span> Secciones</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('accesibilidad',this)"><span class="admin-nav-icon">♿</span> Accesibilidad</button>
+        <div class="admin-nav-section">Estadísticas</div>
+        <button class="admin-nav-btn" onclick="showAdminPanel('estadisticas',this)"><span class="admin-nav-icon">📈</span> Métricas</button>
+        <button class="admin-nav-btn" onclick="showAdminPanel('reportes',this)"><span class="admin-nav-icon">📤</span> Reportes</button>
+      </div>
+      <div class="admin-exit">
+        <button onclick="exitAdmin()">🚪 Salir del Panel</button>
+      </div>
+    </div>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <h1 id="admin-title">Dashboard</h1>
+        <div class="admin-user-badge">👤 Admin · Desarrollador</div>
+        <button class="btn-ghost" style="font-size:12px;padding:6px 12px;" onclick="exitAdmin()">Ver Sitio Público</button>
+      </div>
+      <div class="admin-content">
+
+        <!-- DASHBOARD PANEL -->
+        <div class="admin-panel active" id="admin-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card blue">
+              <div class="stat-value">1,248</div>
+              <div class="stat-label">Visitas este mes</div>
+              <div class="stat-delta">▲ 12% vs mes anterior</div>
+            </div>
+            <div class="stat-card pink">
+              <div class="stat-value">84</div>
+              <div class="stat-label">Descargas boletín</div>
+              <div class="stat-delta">▲ 8% vs mes anterior</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-value">23</div>
+              <div class="stat-label">Formularios recibidos</div>
+              <div class="stat-delta">▲ 5 nuevos hoy</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-value">156</div>
+              <div class="stat-label">Inscripciones actividades</div>
+              <div class="stat-delta neg">▼ 3% vs mes anterior</div>
+            </div>
+          </div>
+          <div class="admin-card" style="margin-bottom:24px;">
+            <h3><span>📊</span> Visitas por mes (2026)</h3>
+            <div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding-top:8px;">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <div class="chart-bar" style="height:60%;background:var(--azul);opacity:0.6;border-radius:4px 4px 0 0;"></div>
+                <span style="font-size:10px;color:var(--text-light);">Ene</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <div class="chart-bar" style="height:75%;background:var(--azul);opacity:0.7;border-radius:4px 4px 0 0;"></div>
+                <span style="font-size:10px;color:var(--text-light);">Feb</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <div class="chart-bar" style="height:100%;background:linear-gradient(to top,var(--azul),var(--rosa));border-radius:4px 4px 0 0;"></div>
+                <span style="font-size:10px;color:var(--text-light);font-weight:700;">Mar</span>
+              </div>
+            </div>
+          </div>
+          <div class="admin-grid">
+            <div class="admin-card">
+              <h3><span>🔥</span> Secciones más visitadas</h3>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--azul);"></div>Consejo PJL</div><span class="badge badge-blue">342</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--rosa);"></div>Boletín</div><span class="badge badge-pink">298</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#22c55e;"></div>Zonas</div><span class="badge badge-green">215</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#f59e0b;"></div>Contacto</div>192</div>
+            </div>
+            <div class="admin-card">
+              <h3><span>📬</span> Últimas consultas</h3>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--rosa);"></div>Ana R. — Unirse PJL</div><span class="badge badge-pink">Hoy</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--azul);"></div>Marcos G. — Retiro</div><span class="badge badge-blue">Hoy</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#22c55e;"></div>Laura M. — Zona 3</div><span class="badge badge-green">Ayer</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--rosa);"></div>Pedro V. — Boletín</div>Ayer</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENIDO PANEL -->
+        <div class="admin-panel" id="admin-contenido">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div class="admin-card">
+              <h3><span>✏️</span> Editar Información Institucional</h3>
+              <div class="form-field"><label class="form-label">Misión</label><textarea class="form-textarea">Anunciar el Evangelio de Jesucristo a los jóvenes de Luque...</textarea></div>
+              <div class="form-field"><label class="form-label">Visión</label><textarea class="form-textarea">Ser una Pastoral Juvenil viva, misionera y profética...</textarea></div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">💾 Guardar cambios</button>
+            </div>
+            <div class="admin-card">
+              <h3><span>📰</span> Gestionar Noticias</h3>
+              <div class="form-field"><label class="form-label">Título noticia</label><input class="form-input" placeholder="Nueva noticia..."></div>
+              <div class="form-field"><label class="form-label">Contenido</label><textarea class="form-textarea" placeholder="Texto de la noticia..."></textarea></div>
+              <div class="form-field"><label class="form-label">Categoría</label>
+                <select class="form-select"><option>Actividad</option><option>Formación</option><option>Misión</option><option>General</option></select>
+              </div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">➕ Publicar</button>
+            </div>
+            <div class="admin-card">
+              <h3><span>❓</span> Gestionar FAQ</h3>
+              <div class="form-field"><label class="form-label">Pregunta</label><input class="form-input" placeholder="Nueva pregunta..."></div>
+              <div class="form-field"><label class="form-label">Respuesta</label><textarea class="form-textarea" placeholder="Respuesta..."></textarea></div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">➕ Agregar FAQ</button>
+            </div>
+            <div class="admin-card">
+              <h3><span>🔗</span> Redes Sociales</h3>
+              <div class="form-field"><label class="form-label">Instagram</label><input class="form-input" placeholder="@usuario" value="@pjl_luque"></div>
+              <div class="form-field"><label class="form-label">TikTok</label><input class="form-input" placeholder="@usuario" value="@pastoraljuvenilluquena"></div>
+              <div class="form-field"><label class="form-label">Facebook</label><input class="form-input" placeholder="URL o usuario"></div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">💾 Actualizar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVIDADES PANEL -->
+        <div class="admin-panel" id="admin-actividades">
+          <div class="admin-card" style="margin-bottom:24px;">
+            <h3><span>➕</span> Nueva Actividad / Evento</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+              <div class="form-field"><label class="form-label">Nombre</label><input class="form-input" placeholder="Nombre del evento"></div>
+              <div class="form-field"><label class="form-label">Fecha</label><input class="form-input" type="date"></div>
+              <div class="form-field"><label class="form-label">Zona</label><select class="form-select"><option>Todas</option><option>Zona 1</option><option>Zona 2</option><option>Zona 3</option><option>Zona 4</option></select></div>
+            </div>
+            <div class="form-field"><label class="form-label">Descripción</label><textarea class="form-textarea" placeholder="Detalle del evento..."></textarea></div>
+            <div style="display:flex;gap:12px;align-items:center;">
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">📅 Publicar evento</button>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                <input type="checkbox"> Permitir inscripción online
+              </label>
+            </div>
+          </div>
+          <div class="admin-card">
+            <h3><span>📋</span> Próximos eventos</h3>
+            <table class="admin-table">
+              <thead><tr><th>Evento</th><th>Fecha</th><th>Zona</th><th>Inscriptos</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td>Retiro Zonal Z1</td><td>29 Mar 2026</td><td>Zona 1</td><td>42</td><td><span class="badge badge-green">Activo</span></td></tr>
+                <tr><td>Encuentro Consejo</td><td>05 Abr 2026</td><td>General</td><td>18</td><td><span class="badge badge-blue">Planificado</span></td></tr>
+                <tr><td>Misión Barrial Z4</td><td>12 Abr 2026</td><td>Zona 4</td><td>28</td><td><span class="badge badge-pink">Abierto</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DOCUMENTOS PANEL -->
+        <div class="admin-panel" id="admin-documentos">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div class="admin-card">
+              <h3><span>📤</span> Subir Documento</h3>
+              <div class="upload-area" onclick="alert('Integrar con sistema de archivos')">
+                <div style="font-size:40px;">📁</div>
+                <p>Arrastrá archivos aquí o hacé clic para seleccionar</p>
+                <p>PDF, DOCX, XLSX — máx. 10MB</p>
+              </div>
+              <div class="form-field" style="margin-top:16px;"><label class="form-label">Categoría</label>
+                <select class="form-select"><option>Boletín mensual</option><option>Currículum pastoral</option><option>Material de formación</option><option>Documento institucional</option></select>
+              </div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">📤 Subir</button>
+            </div>
+            <div class="admin-card">
+              <h3><span>📂</span> Documentos publicados</h3>
+              <table class="admin-table">
+                <thead><tr><th>Archivo</th><th>Tipo</th><th>Descargas</th></tr></thead>
+                <tbody>
+                  <tr><td>Boletín Marzo 2026</td><td><span class="badge badge-blue">Boletín</span></td><td>84</td></tr>
+                  <tr><td>Curriculum M.A. González</td><td><span class="badge badge-pink">Currículum</span></td><td>12</td></tr>
+                  <tr><td>Plan Pastoral 2026</td><td><span class="badge badge-green">Formación</span></td><td>37</td></tr>
+                  <tr><td>Boletín Febrero 2026</td><td><span class="badge badge-blue">Boletín</span></td><td>61</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- GALERÍA PANEL -->
+        <div class="admin-panel" id="admin-galeria">
+          <div class="admin-card" style="margin-bottom:24px;">
+            <h3><span>🖼️</span> Subir fotos / videos</h3>
+            <div class="upload-area">
+              <div style="font-size:40px;">📷</div>
+              <p>Subí fotos (JPG, PNG) o videos (MP4) de actividades</p>
+            </div>
+          </div>
+          <div class="admin-card">
+            <h3><span>🗂️</span> Galería actual</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:8px;">
+              <div style="aspect-ratio:1;background:linear-gradient(135deg,var(--azul-light),var(--rosa-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;">📸</div>
+              <div style="aspect-ratio:1;background:linear-gradient(135deg,var(--rosa-light),#ffeb99);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;">📸</div>
+              <div style="aspect-ratio:1;background:linear-gradient(135deg,#e0ffe8,var(--azul-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;">🎥</div>
+              <div style="aspect-ratio:1;background:linear-gradient(135deg,#fff3e0,var(--rosa-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;">📸</div>
+              <div style="aspect-ratio:1;border:2px dashed var(--gris-med);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;color:var(--text-light);">+</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOLETIN ADMIN PANEL -->
+        <div class="admin-panel" id="admin-boletin_admin">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div class="admin-card">
+              <h3><span>📰</span> Publicar nueva edición</h3>
+              <div class="form-field"><label class="form-label">Título edición</label><input class="form-input" placeholder="Ej: Boletín Abril 2026"></div>
+              <div class="form-field"><label class="form-label">Mes / Año</label><input class="form-input" type="month"></div>
+              <div class="form-field"><label class="form-label">Descripción / Resumen</label><textarea class="form-textarea" placeholder="Breve descripción del contenido..."></textarea></div>
+              <div class="upload-area" style="margin:16px 0;">
+                <div style="font-size:32px;">📄</div>
+                <p>Subir PDF del boletín</p>
+              </div>
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">📤 Publicar edición</button>
+            </div>
+            <div class="admin-card">
+              <h3><span>📊</span> Estadísticas de descargas</h3>
+              <table class="admin-table">
+                <thead><tr><th>Edición</th><th>Descargas</th><th>Acciones</th></tr></thead>
+                <tbody>
+                  <tr><td>Marzo 2026</td><td>84</td><td><a href="#" style="color:var(--rosa);font-size:12px;">Eliminar</a></td></tr>
+                  <tr><td>Febrero 2026</td><td>61</td><td><a href="#" style="color:var(--rosa);font-size:12px;">Eliminar</a></td></tr>
+                  <tr><td>Enero 2026</td><td>49</td><td><a href="#" style="color:var(--rosa);font-size:12px;">Eliminar</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- USUARIOS PANEL -->
+        <div class="admin-panel" id="admin-usuarios">
+          <div class="admin-card" style="margin-bottom:24px;">
+            <h3><span>➕</span> Nuevo usuario</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+              <div class="form-field"><label class="form-label">Nombre completo</label><input class="form-input" placeholder="Nombre"></div>
+              <div class="form-field"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="correo@pjl.org.py"></div>
+              <div class="form-field"><label class="form-label">Rol</label>
+                <select class="form-select"><option>Administrador</option><option>Editor</option><option>Colaborador</option></select>
+              </div>
+            </div>
+            <button class="btn-primary" style="font-size:13px;padding:10px 20px;">➕ Crear usuario</button>
+          </div>
+          <div class="admin-card">
+            <h3><span>👥</span> Usuarios del sistema</h3>
+            <table class="admin-table">
+              <thead><tr><th>Usuario</th><th>Email</th><th>Rol</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td>Dev. Principal</td><td>dev@pjl.org.py</td><td><span class="badge badge-blue">Administrador</span></td><td><span class="badge badge-green">Activo</span></td></tr>
+                <tr><td>María González</td><td>maria@pjl.org.py</td><td><span class="badge badge-pink">Editor</span></td><td><span class="badge badge-green">Activo</span></td></tr>
+                <tr><td>Valentina Rodas</td><td>valentina@pjl.org.py</td><td><span class="badge badge-pink">Editor</span></td><td><span class="badge badge-green">Activo</span></td></tr>
+                <tr><td>Diego Mora</td><td>diego@pjl.org.py</td><td><span class="badge" style="background:#fef9c3;color:#854d0e;">Colaborador</span></td><td><span class="badge badge-green">Activo</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECCIONES PANEL -->
+        <div class="admin-panel" id="admin-secciones">
+          <div class="admin-card">
+            <h3><span>🔧</span> Activar / Desactivar secciones del sitio</h3>
+            <p style="font-size:13px;color:var(--text-med);margin-bottom:20px;">Controlá qué secciones son visibles en el sitio público sin eliminar el contenido.</p>
+            <div class="toggle-row"><span>Sección Inicio</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Boletín Mensual</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Galería de Fotos</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Formulario de Inscripción</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>⚡ Campaña Especial (temporal)</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>⚡ Banner Evento Extraordinario</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Sección Histórica</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>FAQ</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span>Organigrama</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div style="margin-top:20px;">
+              <button class="btn-primary" style="font-size:13px;padding:10px 20px;">💾 Guardar configuración</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCESIBILIDAD PANEL -->
+        <div class="admin-panel" id="admin-accesibilidad">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div class="admin-card">
+              <h3><span>♿</span> Configuración de accesibilidad</h3>
+              <div class="toggle-row"><span>Alto contraste habilitado por defecto</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Subtítulos automáticos en videos</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Modo lectura simplificada</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Barra de accesibilidad visible</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+              <div class="form-field" style="margin-top:16px;">
+                <label class="form-label">Tamaño de letra base (px)</label>
+                <input type="range" min="12" max="22" value="16" style="width:100%;">
+              </div>
+            </div>
+            <div class="admin-card">
+              <h3><span>🌐</span> Idiomas / Traducciones</h3>
+              <div class="toggle-row"><span>Español (principal)</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Guaraní (traducción básica)</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Inglés (traducción básica)</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+              <div class="toggle-row"><span>Portugués (traducción básica)</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+              <p style="font-size:11px;color:var(--text-light);margin-top:16px;">Las traducciones básicas pueden integrarse con Google Translate API.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTADÍSTICAS PANEL -->
+        <div class="admin-panel" id="admin-estadisticas">
+          <div class="stats-grid">
+            <div class="stat-card blue"><div class="stat-value">4,832</div><div class="stat-label">Visitas totales 2026</div><div class="stat-delta">▲ 24% vs 2025</div></div>
+            <div class="stat-card pink"><div class="stat-value">312</div><div class="stat-label">Descargas boletines</div><div class="stat-delta">▲ 18%</div></div>
+            <div class="stat-card green"><div class="stat-value">89</div><div class="stat-label">Formularios enviados</div><div class="stat-delta">▲ 32%</div></div>
+            <div class="stat-card amber"><div class="stat-value">47</div><div class="stat-label">Currículums descargados</div><div class="stat-delta">▲ 5%</div></div>
+          </div>
+          <div class="admin-grid">
+            <div class="admin-card">
+              <h3><span>📱</span> Dispositivos</h3>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--azul);"></div>Móvil</div>62%</div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--rosa);"></div>Escritorio</div>31%</div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#22c55e;"></div>Tablet</div>7%</div>
+            </div>
+            <div class="admin-card">
+              <h3><span>🌍</span> Origen del tráfico</h3>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--azul);"></div>Instagram</div><span class="badge badge-blue">44%</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:var(--rosa);"></div>TikTok</div><span class="badge badge-pink">28%</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#22c55e;"></div>Búsqueda directa</div><span class="badge badge-green">18%</span></div>
+              <div class="list-item"><div class="list-item-left"><div class="list-dot" style="background:#f59e0b;"></div>Otros</div>10%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPORTES PANEL -->
+        <div class="admin-panel" id="admin-reportes">
+          <div class="admin-card">
+            <h3><span>📤</span> Exportar reportes</h3>
+            <p style="font-size:13px;color:var(--text-med);margin-bottom:24px;">Generá reportes en formato PDF o Excel para análisis y presentaciones del Consejo PJL.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+              <div class="info-card" style="cursor:pointer;" onclick="alert('Exportando reporte de visitas...')">
+                <div class="info-card-icon">📊</div>
+                <h3>Visitas del mes</h3>
+                <p>Reporte de tráfico con gráficos y comparativos</p>
+                <div style="margin-top:12px;"><span class="badge badge-blue">PDF · Excel</span></div>
+              </div>
+              <div class="info-card" style="cursor:pointer;" onclick="alert('Exportando descargas...')">
+                <div class="info-card-icon">📥</div>
+                <h3>Descargas</h3>
+                <p>Estadísticas de boletines y currículums descargados</p>
+                <div style="margin-top:12px;"><span class="badge badge-pink">PDF · Excel</span></div>
+              </div>
+              <div class="info-card" style="cursor:pointer;" onclick="alert('Exportando formularios...')">
+                <div class="info-card-icon">📬</div>
+                <h3>Formularios</h3>
+                <p>Lista de consultas e inscripciones recibidas</p>
+                <div style="margin-top:12px;"><span class="badge badge-green">Excel</span></div>
+              </div>
+              <div class="info-card" style="cursor:pointer;" onclick="alert('Exportando inscripciones...')">
+                <div class="info-card-icon">🗂️</div>
+                <h3>Inscripciones</h3>
+                <p>Participación por zona y tipo de actividad</p>
+                <div style="margin-top:12px;"><span class="badge badge-blue">PDF · Excel</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end admin-content -->
+    </div><!-- end admin-main -->
+  </div><!-- end page-admin -->
+
+</div><!-- end app -->
+
+<!-- ======= FOOTER (solo en páginas públicas) ======= -->
+<div id="public-footer" style="position:fixed;bottom:0;left:0;right:0;z-index:500;display:none;">
+  <footer>
+    <div class="footer-brand">
+      <h3>✝ Pastoral Juvenil Luqueña</h3>
+      <p>Luque, Paraguay · Fe · Comunidad · Misión</p>
+    </div>
+    <div class="footer-socials">
+      <a href="#" class="footer-social" title="Instagram">📸</a>
+      <a href="#" class="footer-social" title="TikTok">🎵</a>
+      <a href="#" class="footer-social" title="Facebook">📘</a>
+      <a href="#" class="footer-social" title="YouTube">▶️</a>
+    </div>
+    <div class="footer-copy">
+      <div>© 2026 PJL · Todos los derechos reservados</div>
+      <div style="margin-top:4px;color:rgba(255,255,255,0.5);">Diseñado con ❤️ para la juventud de Luque</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ======= NAVIGATION =======
+const publicPages = ['home','info','zonas','consejo','boletin','historia','faq','organigrama','contacto'];
+let currentPage = 'home';
+let isAdminLoggedIn = false;
+let fontSize = 16;
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + id);
+  if (target) {
+    target.classList.add('active');
+    currentPage = id;
+  }
+  // Update nav active
+  document.querySelectorAll('#nav-home').forEach(a => a.classList.remove('active'));
+  if (id === 'home') document.getElementById('nav-home').classList.add('active');
+  // Footer
+  const footer = document.getElementById('public-footer');
+  footer.style.display = (id === 'admin') ? 'none' : 'block';
+  // Adjust app bottom padding
+  document.getElementById('app').style.bottom = (id === 'admin') ? '0' : '76px';
+}
+
+// ======= TABS =======
+function showZonaTab(num, btn) {
+  document.querySelectorAll('[id^="zona-panel-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('zona-panel-' + num).classList.add('active');
+  document.querySelectorAll('#page-zonas .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function showConsejoTab(id, btn) {
+  document.querySelectorAll('[id^="consejo-"]').forEach(p => p.classList.remove('active'));
+  document.getElementById('consejo-' + id).classList.add('active');
+  document.querySelectorAll('#page-consejo .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function showZona(num) {
+  setTimeout(() => showZonaTab(num, document.querySelectorAll('#page-zonas .tab-btn')[num-1]), 100);
+}
+
+// ======= FAQ =======
+function toggleFaq(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+// ======= ADMIN =======
+function openLogin() {
+  if (isAdminLoggedIn) { showPage('admin'); return; }
+  document.getElementById('login-overlay').style.display = 'flex';
+  document.getElementById('login-user').focus();
+}
+
+function closeLogin() {
+  document.getElementById('login-overlay').style.display = 'none';
+}
+
+function doLogin() {
+  const user = document.getElementById('login-user').value;
+  const pass = document.getElementById('login-pass').value;
+  if ((user === 'admin@pjl.org.py' || user === 'admin') && (pass === 'pjl2026' || pass === 'admin')) {
+    isAdminLoggedIn = true;
+    closeLogin();
+    showPage('admin');
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    setTimeout(() => document.getElementById('login-error').style.display = 'none', 3000);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-overlay').style.display === 'flex') doLogin();
+});
+
+function exitAdmin() {
+  showPage('home');
+}
+
+function showAdminPanel(id, btn) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('admin-' + id).classList.add('active');
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = {
+    dashboard: 'Dashboard', contenido: 'Gestión de Contenido', actividades: 'Actividades y Calendario',
+    documentos: 'Documentos', galeria: 'Galería Multimedia', boletin_admin: 'Boletín Digital',
+    usuarios: 'Gestión de Usuarios', secciones: 'Secciones del Sitio', accesibilidad: 'Accesibilidad e Idiomas',
+    estadisticas: 'Estadísticas y Métricas', reportes: 'Exportar Reportes'
+  };
+  document.getElementById('admin-title').textContent = titles[id] || 'Panel';
+}
+
+// ======= ACCESSIBILITY =======
+function changeFont(delta) {
+  fontSize = Math.max(12, Math.min(24, fontSize + delta));
+  document.documentElement.style.fontSize = fontSize + 'px';
+}
+
+function toggleContrast() {
+  document.body.classList.toggle('high-contrast');
+}
+
+// ======= CONTACT =======
+function submitContact() {
+  alert('✉️ Mensaje enviado correctamente.\nUn miembro del equipo te contactará pronto.\n¡Gracias por escribirnos!');
+}
+
+// Init
+showPage('home');
+</script>
+</body>
+</html>

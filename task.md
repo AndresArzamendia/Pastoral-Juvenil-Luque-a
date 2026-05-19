@@ -1,0 +1,4 @@
+- [x] Update `globals.css` with premium glassmorphic, animation, and UI layout styles
+- [x] Implement IntersectionObserver in `src/app/page.tsx` so elements reveal on scroll
+- [x] Refine the Google Calendar interface inside `src/app/page.tsx`
+- [x] Redesign `src/app/admin/page.tsx` (Login, layout, liturgical color presets, tables)
