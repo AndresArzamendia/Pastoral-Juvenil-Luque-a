@@ -1,9 +1,5 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-
-// Initialize the Google Gen AI SDK
-// It automatically picks up GEMINI_API_KEY from the environment
-const ai = new GoogleGenAI({});
 
 export async function POST(req: Request) {
   try {
@@ -13,12 +9,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'El prompt es requerido' }, { status: 400 });
     }
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: 'Falta configurar GEMINI_API_KEY.' }, { status: 500 });
+    }
 
-    return NextResponse.json({ text: response.text });
+    const ai = new GoogleGenerativeAI(apiKey);
+    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+
+    return NextResponse.json({ text: result.response.text() });
   } catch (error: unknown) {
     console.error('Error generating AI content:', error instanceof Error ? error.message : error);
     return NextResponse.json({ error: 'Error al generar contenido con IA.' }, { status: 500 });

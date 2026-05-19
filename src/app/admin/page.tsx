@@ -278,12 +278,24 @@ function AdminContent() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    const inputUser = loginForm.user.trim().toLowerCase();
+    const inputPass = loginForm.pass.trim();
     // Intentar primero con las credenciales maestras (CREDS) y luego con la lista de usuarios
-    const isMaster = loginForm.user === CREDS.user && loginForm.pass === CREDS.pass;
-    const userMatch = allUsers.find(u => u.email === loginForm.user && (u.password === loginForm.pass || loginForm.pass === 'admin_master'));
+    const isMaster = inputUser === CREDS.user && inputPass === CREDS.pass;
+    const userMatch = allUsers.find(u => {
+      const email = u.email.trim().toLowerCase();
+      const name = u.name.trim().toLowerCase();
+      const canUseMasterPass = inputPass === 'admin_master';
+      const passwordMatches = u.password === inputPass || canUseMasterPass;
+      const userMatches = email === inputUser || name === inputUser || (email === 'admin@pjl.org' && inputUser === CREDS.user);
+      return u.status !== 'inactivo' && userMatches && passwordMatches;
+    });
 
     if (isMaster || userMatch) {
-      const authUser = userMatch || { id: 'master', name: 'Administrador Principal', email: CREDS.user, role: 'superadmin', status: 'activo' } as User;
+      const authUser = {
+        ...(userMatch || { id: 'master', name: 'Administrador Principal', email: CREDS.user, role: 'superadmin', status: 'activo' } as User),
+        lastActive: new Date().toISOString()
+      };
       setLoggedIn(true);
       setCurrentUser(authUser);
       localStorage.setItem('pjl_admin_auth', 'true');
