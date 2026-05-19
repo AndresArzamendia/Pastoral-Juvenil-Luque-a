@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans, Cormorant_Garamond } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <ThemeLoader />
         {children}
+        <Analytics />
         {/* Vatican News Widget Script — must load after DOM */}
         <script
           dangerouslySetInnerHTML={{
