@@ -677,6 +677,26 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   position: relative;
   z-index: 2;
 }
+.login-password-field {
+  position: relative;
+}
+.login-password-input {
+  padding-right: 96px;
+}
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.login-password-toggle:hover {
+  color: var(--gold);
+}
 
 .admin-shell {
   display: flex;
@@ -1283,7 +1303,22 @@ input, textarea { cursor: text; }
     grid-template-columns: 1fr !important;
   }
   /* Login container */
-  .login-glass-container { padding: 36px 24px; }
+  .login-glass-container {
+    max-width: 420px;
+    padding: 36px 24px;
+    border-radius: 18px;
+  }
+  .login-back-button {
+    width: 100%;
+    justify-content: center;
+  }
+  .login-title {
+    font-size: 1.85rem !important;
+  }
+  .login-alert {
+    font-size: 12px !important;
+    padding: 14px 12px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1291,6 +1326,34 @@ input, textarea { cursor: text; }
   .admin-stat-card { padding: 16px 12px; }
   .stat-val { font-size: 22px; }
   .admin-content-area { padding: 16px 12px; }
+  .admin-login-screen {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .login-glass-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 32px 18px 24px;
+  }
+  .login-back-button {
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+  }
+  .login-title {
+    font-size: 1.65rem !important;
+  }
+  .login-password-input {
+    padding-right: 86px;
+  }
+  .login-password-toggle {
+    right: 12px;
+    font-size: 11px;
+  }
+  .btn-premium.btn-premium-gold[style*="width: 100%"] {
+    min-height: 52px;
+  }
 }
 
 

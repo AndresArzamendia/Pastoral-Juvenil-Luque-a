@@ -96,6 +96,7 @@ function AdminContent() {
   }, [allUsers]);
   const [loginForm, setLoginForm] = useState({ user: '', pass: '' });
   const [loginErr, setLoginErr] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const hasPermission = (m: Module, action: 'view' | 'edit' | 'admin' = 'view') => {
     if (!loggedIn) return false;
@@ -291,14 +292,23 @@ function AdminContent() {
     e.preventDefault();
     const inputUser = loginForm.user.trim().toLowerCase();
     const inputPass = loginForm.pass.trim();
+    const normalize = (value: string) => value.trim().toLowerCase();
     // Intentar primero con las credenciales maestras (CREDS) y luego con la lista de usuarios
     const isMaster = inputUser === CREDS.user && inputPass === CREDS.pass;
     const userMatch = allUsers.find(u => {
-      const email = u.email.trim().toLowerCase();
-      const name = u.name.trim().toLowerCase();
+      const email = normalize(u.email);
+      const name = normalize(u.name);
+      const emailAlias = email.split('@')[0];
+      const compactName = name.replace(/\s+/g, '');
       const canUseMasterPass = inputPass === 'admin_master';
       const passwordMatches = u.password === inputPass || canUseMasterPass;
-      const userMatches = email === inputUser || name === inputUser || (email === 'admin@pjl.org' && inputUser === CREDS.user);
+      const userMatches = [
+        email,
+        name,
+        emailAlias,
+        compactName,
+        email === 'admin@pjl.org' ? CREDS.user : '',
+      ].includes(inputUser);
       return u.status !== 'inactivo' && userMatches && passwordMatches;
     });
 
@@ -312,6 +322,7 @@ function AdminContent() {
       localStorage.setItem('pjl_admin_auth', 'true');
       localStorage.setItem('pjl_current_user', JSON.stringify(authUser));
       setLoginErr(false);
+      setShowPassword(false);
       showToast(`¡Bienvenido, ${authUser.name}! ✔`);
       addLog('inicio de sesión', 'sistema', `Usuario ${authUser.email} ha entrado al panel.`);
     } else {
@@ -420,6 +431,7 @@ function AdminContent() {
           <button
             type="button"
             onClick={() => router.push('/')}
+            className="login-back-button"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               background: 'rgba(200,151,58,0.12)', border: '1px solid rgba(200,151,58,0.4)',
@@ -430,18 +442,50 @@ function AdminContent() {
           >
             ← Volver al Menú Principal
           </button>
-          <div className="serif" style={{ fontSize: '2rem', color: 'var(--navy)', letterSpacing: '-1px' }}>PJL <em>Admin</em></div>
+          <div className="serif login-title" style={{ fontSize: '2rem', color: 'var(--navy)', letterSpacing: '-1px' }}>PJL <em>Admin</em></div>
           <p className="premium-label" style={{ color: 'var(--gold)', marginTop: '5px' }}>Acceso Restringido</p>
         </div>
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {loginErr && <div style={{ background: '#fee2e2', color: '#b91c1c', padding: '12px', borderRadius: '8px', fontSize: '13px', textAlign: 'center' }}>Usuario o contraseña incorrectos</div>}
+          {loginErr && <div className="login-alert" style={{ background: '#fee2e2', color: '#b91c1c', padding: '12px', borderRadius: '8px', fontSize: '13px', textAlign: 'center' }}>Usuario o contraseña incorrectos</div>}
           <div className="form-group">
             <label className="premium-label" style={{ marginBottom: '8px', display: 'block' }}>Usuario</label>
-            <input className="pjl-input" value={loginForm.user} onChange={e => setLoginForm({...loginForm, user: e.target.value})} placeholder="admin" required />
+            <input
+              className="pjl-input"
+              value={loginForm.user}
+              onChange={e => {
+                setLoginForm({ ...loginForm, user: e.target.value });
+                if (loginErr) setLoginErr(false);
+              }}
+              placeholder="admin"
+              autoComplete="username"
+              required
+            />
           </div>
           <div className="form-group">
             <label className="premium-label" style={{ marginBottom: '8px', display: 'block' }}>Contraseña</label>
-            <input className="pjl-input" type="password" value={loginForm.pass} onChange={e => setLoginForm({...loginForm, pass: e.target.value})} placeholder="••••••••" required />
+            <div className="login-password-field">
+              <input
+                className="pjl-input login-password-input"
+                type={showPassword ? 'text' : 'password'}
+                value={loginForm.pass}
+                onChange={e => {
+                  setLoginForm({ ...loginForm, pass: e.target.value });
+                  if (loginErr) setLoginErr(false);
+                }}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                className="login-password-toggle"
+                onClick={() => setShowPassword(prev => !prev)}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
           </div>
           <button type="submit" className="btn-premium btn-premium-gold" style={{ width: '100%', marginTop: '10px' }}>Entrar al Panel</button>
         </form>
