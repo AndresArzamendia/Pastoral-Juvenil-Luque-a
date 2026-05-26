@@ -142,6 +142,7 @@ function AdminContent() {
     if (!loggedIn) return false;
     if (!currentUser) return true; 
     if (currentUser.role === 'superadmin') return true;
+    if (m === 'dashboard' && action === 'view') return true;
 
     const explicitPermissions = currentUser.permissions || [];
     const hasExplicitRules = explicitPermissions.length > 0;
@@ -452,7 +453,7 @@ function AdminContent() {
       permissions:
         form.role === 'superadmin'
           ? NAV_ITEMS.map(n => n.id)
-          : Array.from(new Set(form.permissions || [])),
+          : Array.from(new Set(['dashboard', ...(form.permissions || [])])),
     };
     const updated = editId
       ? allUsers.map(u => u.id === editId ? { ...u, ...normalizedUser } : u)
@@ -2483,7 +2484,7 @@ function AdminContent() {
                   </div>
                 </div>
                 <button className="btn-premium btn-premium-gold" onClick={() => {
-                  setForm({ email: '', name: '', role: 'editor' });
+                  setForm({ email: '', name: '', role: 'editor', permissions: ['dashboard'] });
                   setModal('usuarios');
                 }}>+ NUEVO USUARIO</button>
               </div>
