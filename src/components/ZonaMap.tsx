@@ -152,13 +152,26 @@ export default function ZonaMap({
       : selectedZone ? ZONE_CENTERS[selectedZone] : [-25.2688, -57.4754];
     const zoom = mapZoom || (selectedZone ? 14 : 13);
     
-    // Only set view if coordinates or zoom actually changed to avoid flicker
+    // Centering logic disabled to keep map view stable during zone capture
+// const center: [number, number] = mapCenterLat && mapCenterLng
+//   ? [mapCenterLat, mapCenterLng]
+//   : selectedZone ? ZONE_CENTERS[selectedZone] : [-25.2688, -57.4754];
+// const zoom = mapZoom || (selectedZone ? 14 : 13);
+// // Only set view if coordinates or zoom actually changed to avoid flicker
+// const currentCenter = map.getCenter();
+// const currentZoom = map.getZoom();
+// const dist = Math.sqrt(Math.pow(currentCenter.lat - center[0], 2) + Math.pow(currentCenter.lng - center[1], 2));
+// if (dist > 0.0001 || Math.abs(currentZoom - zoom) > 0.1) {
+//   map.setView(center, zoom);
+// }
     const currentCenter = map.getCenter();
     const currentZoom = map.getZoom();
-    const dist = Math.sqrt(Math.pow(currentCenter.lat - center[0], 2) + Math.pow(currentCenter.lng - center[1], 2));
-    
-    if (dist > 0.0001 || Math.abs(currentZoom - zoom) > 0.1) {
-      map.setView(center, zoom);
+    // Update view only when not actively drawing a zone to avoid resetting map during capture
+    if (!drawingMode) {
+      const dist = Math.sqrt(Math.pow(currentCenter.lat - center[0], 2) + Math.pow(currentCenter.lng - center[1], 2));
+      if (dist > 0.0001 || Math.abs(currentZoom - zoom) > 0.1) {
+        map.setView(center, zoom);
+      }
     }
 
     // Draw zone polygons
@@ -281,17 +294,21 @@ export default function ZonaMap({
 
     // Draw temp drawing polygon
     if (tempPolygon && tempPolygon.length > 0) {
-      const polyline = L.polyline(tempPolygon, { color: '#C8973A', weight: 4, dashArray: '10, 10' }).addTo(map);
-      layersRef.current.push(polyline);
-      
-      tempPolygon.forEach((p, i) => {
-        const dot = L.circleMarker(p, { radius: 5, fillColor: '#C8973A', color: '#fff', weight: 2, fillOpacity: 1 }).addTo(map);
-        layersRef.current.push(dot);
-      });
-      
-      if (tempPolygon.length > 2) {
-        const fill = L.polygon(tempPolygon, { color: 'transparent', fillColor: '#C8973A', fillOpacity: 0.2 }).addTo(map);
-        layersRef.current.push(fill);
+      try {
+        const polyline = L.polyline(tempPolygon, { color: '#C8973A', weight: 4, dashArray: '10, 10' }).addTo(map);
+        layersRef.current.push(polyline);
+        
+        tempPolygon.forEach((p, i) => {
+          const dot = L.circleMarker(p, { radius: 5, fillColor: '#C8973A', color: '#fff', weight: 2, fillOpacity: 1 }).addTo(map);
+          layersRef.current.push(dot);
+        });
+        
+        if (tempPolygon.length > 2) {
+          const fill = L.polygon(tempPolygon, { color: 'transparent', fillColor: '#C8973A', fillOpacity: 0.2 }).addTo(map);
+          layersRef.current.push(fill);
+        }
+      } catch (err) {
+        console.error('Leaflet Error rendering tempPolygon:', err);
       }
     }
 
@@ -305,7 +322,7 @@ export default function ZonaMap({
       });
       layersRef.current = [];
     };
-  }, [chapels, selectedZone, zoneColors, polygons, tempPolygon, showAllZones, mapCenterLat, mapCenterLng, mapZoom, scrollWheelZoom]);
+  }, [chapels, selectedZone, zoneColors, polygons, tempPolygon, showAllZones, mapCenterLat, mapCenterLng, mapZoom, scrollWheelZoom, drawingMode, hideFallbackPolygon]);
 
   // Handle actual unmount
   useEffect(() => {

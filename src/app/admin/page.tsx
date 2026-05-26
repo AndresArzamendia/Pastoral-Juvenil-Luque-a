@@ -480,7 +480,7 @@ function AdminContent() {
           </div>
           <div className="form-group">
             <label className="premium-label" style={{ marginBottom: '8px', display: 'block' }}>Contraseña</label>
-            <div className="login-password-field">
+            <div className="login-password-field" style={{ position: 'relative' }}>
               <input
                 className="pjl-input login-password-input"
                 type={showPassword ? 'text' : 'password'}
@@ -493,16 +493,16 @@ function AdminContent() {
                 autoComplete="current-password"
                 required
               />
-              <button
-                type="button"
-                className="login-password-toggle"
-                onClick={() => setShowPassword(prev => !prev)}
-                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                aria-pressed={showPassword}
-              >
-                {showPassword ? 'Ocultar' : 'Mostrar'}
-              </button>
             </div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', fontSize: '13px', color: 'var(--navy)', cursor: 'pointer', fontWeight: 600 }}>
+              <input 
+                type="checkbox" 
+                checked={showPassword} 
+                onChange={() => setShowPassword(!showPassword)} 
+                style={{ width: '16px', height: '16px', accentColor: 'var(--gold)', cursor: 'pointer' }}
+              />
+              Mostrar contraseña
+            </label>
           </div>
           <button type="submit" className="btn-premium btn-premium-gold" style={{ width: '100%', marginTop: '10px' }}>Entrar al Panel</button>
         </form>
@@ -808,6 +808,40 @@ function AdminContent() {
                               </div>
                             ))}
                           </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* DISPOSITIVOS */}
+                  <div style={{ background: '#fff', border: '1px solid #e8e0d5', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', flex: 1 }}>
+                    <h3 style={{ margin: '0 0 16px', color: 'var(--navy)', fontSize: '15px', fontWeight: 700 }}>📱 Dispositivos</h3>
+                    {(() => {
+                      const data = Array.isArray(pageStats) ? pageStats : [];
+                      const desktop = data.reduce((acc, s) => acc + (s?.desktopVisits || 0), 0);
+                      const tablet = data.reduce((acc, s) => acc + (s?.tabletVisits || 0), 0);
+                      const mobile = data.reduce((acc, s) => acc + (s?.mobileVisits || 0), 0);
+                      const totalDevices = desktop + tablet + mobile;
+
+                      if (totalDevices === 0) return <p style={{ color: '#bbb', textAlign: 'center', padding: '10px 0', fontSize: '13px', fontStyle: 'italic', margin: 0 }}>Sin datos de dispositivos aún</p>;
+
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {[
+                            { label: 'Celular', icon: '📱', value: mobile, pct: (mobile / totalDevices) * 100, color: '#10B981' },
+                            { label: 'Computadora', icon: '💻', value: desktop, pct: (desktop / totalDevices) * 100, color: '#3B82F6' },
+                            { label: 'Tablet', icon: '💻', value: tablet, pct: (tablet / totalDevices) * 100, color: '#C8973A' },
+                          ].map((dev, i) => (
+                            <div key={i}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '11px', fontWeight: 600, color: 'var(--navy)' }}>
+                                <span>{dev.icon} {dev.label}</span>
+                                <span style={{ color: '#888' }}>{Math.round(dev.pct)}% ({dev.value.toLocaleString()})</span>
+                              </div>
+                              <div style={{ height: '6px', background: '#f0ece4', borderRadius: '3px', overflow: 'hidden' }}>
+                                <div style={{ height: '100%', width: `${dev.pct}%`, background: dev.color, borderRadius: '3px', transition: '1s ease' }} />
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       );
                     })()}
@@ -1459,27 +1493,39 @@ function AdminContent() {
                 {/* TAB: HISTORIA */}
                 {activeContentTab === 'historia' && (
                   <div className="animate-reveal">
-                    <h4 className="serif" style={{ marginBottom: '20px' }}>Línea de Tiempo (Nuestra Historia)</h4>
-                    <div style={{ display: 'grid', gap: '20px' }}>
+                    <h4 className="serif" style={{ marginBottom: '10px' }}>Línea de Tiempo (Nuestra Historia)</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '25px' }}>Arrastra, edita y añade los hitos históricos. Estos se reflejarán inmediatamente en la sección "Nuestra Historia" de la página principal.</p>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', borderLeft: '2px dashed var(--gold-pale)', paddingLeft: '30px', marginLeft: '10px', position: 'relative' }}>
                       {(content.historiaTimeline || []).map((item, idx) => (
-                        <div key={item.id} style={{ background: 'var(--white)', padding: '20px', borderRadius: '15px', border: '1px solid var(--gold-pale)', position: 'relative', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
+                        <div key={item.id} style={{ background: '#fff', padding: '25px', borderRadius: '16px', border: '1px solid #e8e0d5', position: 'relative', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', transition: '0.3s' }}>
+                          <div style={{ position: 'absolute', left: '-41px', top: '35px', width: '20px', height: '20px', background: 'var(--gold)', borderRadius: '50%', border: '5px solid #faf9f6', boxShadow: '0 0 0 1px var(--gold-pale)' }}></div>
+                          
                           <button 
                             onClick={() => {
                               const newTimeline = content.historiaTimeline.filter((_, i) => i !== idx);
                               setContent({ ...content, historiaTimeline: newTimeline });
                             }}
-                            style={{ position: 'absolute', top: '10px', right: '10px', background: '#ff4444', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer' }}
+                            title="Eliminar evento"
+                            style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#fee2e2', color: '#b91c1c', border: '1px solid #fca5a5', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', transition: '0.2s', zIndex: 10 }}
                           >×</button>
+                          
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
                             <div className="form-group">
-                              <label className="premium-label">TÍTULO/AÑO</label>
-                              <input className="pjl-input" value={item.title} onChange={e => {
+                              <label className="premium-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ background: 'var(--cream)', padding: '4px 8px', borderRadius: '6px', color: 'var(--gold)' }}>📅</span>
+                                AÑO / TÍTULO
+                              </label>
+                              <input className="pjl-input" placeholder="Ej: 2015 - Fundación..." style={{ fontSize: '15px', fontWeight: 700 }} value={item.title} onChange={e => {
                                 const nt = [...content.historiaTimeline]; nt[idx].title = e.target.value; setContent({...content, historiaTimeline: nt});
                               }} />
                             </div>
                             <div className="form-group">
-                              <label className="premium-label">DESCRIPCIÓN</label>
-                              <textarea className="pjl-input" rows={3} value={item.text} onChange={e => {
+                              <label className="premium-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ background: 'var(--cream)', padding: '4px 8px', borderRadius: '6px', color: 'var(--gold)' }}>📝</span>
+                                DESCRIPCIÓN DEL HITO
+                              </label>
+                              <textarea className="pjl-input" rows={4} placeholder="Escribe la historia de este hito..." style={{ fontSize: '14px', lineHeight: '1.6' }} value={item.text} onChange={e => {
                                 const nt = [...content.historiaTimeline]; nt[idx].text = e.target.value; setContent({...content, historiaTimeline: nt});
                               }} />
                             </div>
@@ -2061,24 +2107,45 @@ function AdminContent() {
                 <h3 className="serif">Centro de Descargas</h3>
                 <button className="btn-premium btn-premium-gold" onClick={() => openNew('documentos')}>+ REGISTRAR ARCHIVO</button>
               </div>
-              <div style={{ overflowX: 'auto' }}>
-                <table className="pjl-table">
-                  <thead><tr><th>ARCHIVO</th><th>TIPO</th><th>TAMAÑO</th><th>DESCARGAS</th><th>URL</th></tr></thead>
-                  <tbody>
-                    {docs.map(d => (
-                      <tr key={d.id}>
-                        <td style={{ fontWeight: 700 }}>{d.name}</td>
-                        <td>{d.type}</td>
-                        <td>{d.size}</td>
-                        <td>{d.downloads}</td>
-                        <td>
-                          <button onClick={() => openEdit('documentos', d)} className="btn-premium btn-premium-outline" style={{ padding: '5px 12px' }}>VINCULAR</button>
-                          <button onClick={() => deleteItem('docs', d.id)} className="btn-premium" style={{ color: 'red', marginLeft: '5px' }}>×</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '20px' }}>
+                {docs.map(d => {
+                  const lowerType = d.type?.toLowerCase() || '';
+                  const lowerName = d.name?.toLowerCase() || '';
+                  const isPDF = lowerType.includes('pdf') || lowerName.endsWith('.pdf');
+                  const isWord = lowerType.includes('word') || lowerType.includes('doc') || lowerName.endsWith('.doc') || lowerName.endsWith('.docx');
+                  const isImg = lowerType.includes('img') || lowerType.includes('imagen') || lowerName.endsWith('.png') || lowerName.endsWith('.jpg') || lowerName.endsWith('.jpeg');
+                  const icon = isPDF ? '📄' : isWord ? '📝' : isImg ? '🖼️' : '📁';
+                  const color = isPDF ? '#ef4444' : isWord ? '#3b82f6' : isImg ? '#10b981' : '#C8973A';
+
+                  return (
+                    <div key={d.id} className="pjl-card hover-lift" style={{ padding: '24px', border: '1px solid var(--gold-pale)', display: 'flex', flexDirection: 'column', gap: '15px', background: '#fff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ width: '54px', height: '54px', borderRadius: '14px', background: `${color}15`, color: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
+                          {icon}
+                        </div>
+                        <button onClick={() => deleteItem('docs', d.id)} style={{ background: '#fee2e2', border: '1px solid #fca5a5', color: '#b91c1c', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', cursor: 'pointer', transition: '0.2s' }} title="Eliminar documento">×</button>
+                      </div>
+                      
+                      <div>
+                        <h4 style={{ margin: '0 0 8px', color: 'var(--navy)', fontSize: '15px', fontWeight: 800, lineHeight: 1.3 }}>{d.name}</h4>
+                        <div style={{ display: 'flex', gap: '8px', fontSize: '11px', color: '#888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          <span style={{ background: '#f3f4f6', padding: '2px 8px', borderRadius: '4px' }}>{d.type || 'DOC'}</span>
+                          <span style={{ background: '#f3f4f6', padding: '2px 8px', borderRadius: '4px' }}>{d.size || '0 KB'}</span>
+                        </div>
+                      </div>
+
+                      <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #f0ece4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontSize: '12px', color: 'var(--navy)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '16px', color: 'var(--gold)' }}>📥</span> 
+                          <span>{d.downloads || 0} <span style={{ fontWeight: 400, color: '#888' }}>descargas</span></span>
+                        </div>
+                        <button onClick={() => openEdit('documentos', d)} className="btn-premium btn-premium-gold" style={{ padding: '6px 14px', fontSize: '10px', borderRadius: '8px' }}>
+                          VINCULAR
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

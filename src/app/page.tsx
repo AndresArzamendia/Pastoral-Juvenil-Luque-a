@@ -211,7 +211,7 @@ function HomeContent() {
 
   useEffect(() => {
     trackVisit(currentPage);
-  }, [currentPage]);
+  }, [currentPage, trackVisit]);
 
   // --- VATICAN WIDGET SCRIPT ---
   useEffect(() => {

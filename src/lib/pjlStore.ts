@@ -123,6 +123,9 @@ export interface PageStat {
   label: string; 
   visits: number; 
   interactions: number; 
+  desktopVisits?: number;
+  tabletVisits?: number;
+  mobileVisits?: number;
 }
 
 // ── Curriculum Profiles ────────────────────────────────────────────────────────
@@ -271,14 +274,14 @@ export const DEFAULT_THEME_PALETTE: ThemePalette = {
 };
 
 export const DEFAULT_STATS: PageStat[] = [
-  { page: '/',             label: 'Página Principal',    visits: 0, interactions: 0 },
-  { page: '/agenda',       label: 'Agenda / Calendario', visits: 0, interactions: 0 },
-  { page: '/noticias',     label: 'Noticias',            visits: 0, interactions: 0 },
-  { page: '/zonas',        label: 'Zonas Pastorales',    visits: 0, interactions: 0 },
-  { page: '/curriculos',   label: 'Currículos',          visits: 0, interactions: 0 },
-  { page: '/documentos',   label: 'Documentos',          visits: 0, interactions: 0 },
-  { page: '/mision',       label: 'Misión / Visión',     visits: 0, interactions: 0 },
-  { page: '/contacto',     label: 'Contacto',            visits: 0, interactions: 0 },
+  { page: '/',             label: 'Página Principal',    visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/agenda',       label: 'Agenda / Calendario', visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/noticias',     label: 'Noticias',            visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/zonas',        label: 'Zonas Pastorales',    visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/curriculos',   label: 'Currículos',          visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/documentos',   label: 'Documentos',          visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/mision',       label: 'Misión / Visión',     visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
+  { page: '/contacto',     label: 'Contacto',            visits: 0, interactions: 0, desktopVisits: 0, tabletVisits: 0, mobileVisits: 0 },
 ];
 
 export interface HeroSlide {
