@@ -2522,3 +2522,20 @@ input:checked + .pjl-slider:before {
   overflow: hidden;
 }
 
+/* ==========================================================================
+  PARCHE DE EMERGENCIA: ELIMINA EL TEMBLOR DEL MENÚ LATERAL
+   ========================================================================== */
+.drawer-btn {
+  padding: 14px 18px !important; /* Fuerza el tamaño fijo y elimina el salto a 22px */
+  border: 1px solid transparent !important; /* Reserva el espacio del borde */
+  box-sizing: border-box !important; /* Evita expansiones internas */
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease !important;
+  transform: translateZ(0) !important; /* Fija las fuentes con la tarjeta gráfica */
+  backface-visibility: hidden !important;
+}
+
+.drawer-btn:hover, .drawer-btn:focus {
+  border-color: rgba(200, 151, 58, 0.3) !important; /* Cambia color sin mover la estructura */
+  padding-left: 18px !important; /* Bloquea el intento de estirarse a 22px */
+  transform: translateX(4px) !important; /* Desplazamiento visual aislado y fluido */
+}
