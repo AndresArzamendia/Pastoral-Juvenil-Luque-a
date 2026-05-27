@@ -14,6 +14,7 @@ import {
   DEFAULT_STATS, DEFAULT_THEME_PALETTE, DEFAULT_USERS
 } from '@/lib/pjlStore';
 import { fetchStoreValue, upsertStoreValue, subscribeStoreChanges } from '@/lib/supabaseStore';
+import { getSupabaseClient } from '@/lib/supabase';
 import { SupabaseProfile, fetchProfileByEmail, fetchAllProfiles, fetchPendingProfiles, approveProfile, signInProfile, signUpProfile, subscribeProfileChanges } from '@/lib/supabaseProfiles';
 
 const ZonaMap = dynamic(() => import('@/components/ZonaMap'), { 
@@ -290,6 +291,56 @@ function AdminContent() {
   const [chapels, setChapels] = useLS<Chapel[]>('chapels', []);
   const [pageStats, setPageStats] = useLS<PageStat[]>('stats', DEFAULT_STATS);
   const [logs, setLogs] = useLS<any[]>('logs', []);
+
+  useEffect(() => {
+    const supabase = getSupabaseClient();
+    let isMounted = true;
+
+    const updateStatsFromRemote = (remoteValue: unknown) => {
+      if (!remoteValue) return;
+      try {
+        const stats = remoteValue as PageStat[];
+        setPageStats(stats);
+        const serialized = JSON.stringify(stats);
+        const current = localStorage.getItem('pjl_stats');
+        if (current !== serialized) {
+          localStorage.setItem('pjl_stats', serialized);
+          window.dispatchEvent(new CustomEvent('pjl_store_update', { detail: { key: 'stats' } }));
+        }
+      } catch (error) {
+        console.error('Error parsing remote dashboard stats:', error);
+      }
+    };
+
+    const fetchInitialStats = async () => {
+      try {
+        const remoteStats = await fetchStoreValue<PageStat[]>('stats');
+        if (!isMounted || !remoteStats) return;
+        updateStatsFromRemote(remoteStats);
+      } catch (error) {
+        console.error('Error cargando estadísticas iniciales:', error);
+      }
+    };
+
+    fetchInitialStats();
+
+    const channel = supabase
+      .channel('dashboard_stats_realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'pjl_store', filter: 'key=eq.stats' },
+        (payload: any) => {
+          const value = payload?.new?.value ?? payload?.old?.value;
+          updateStatsFromRemote(value);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      isMounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   // --- LOGGING HELPER ---
   const addLog = (action: string, module: string, details?: string) => {
