@@ -98,7 +98,22 @@ export function subscribeProfileChanges(
 
 export async function signInProfile(email: string, password: string) {
   const supabase = getSupabaseClient();
-  return supabase.auth.signInWithPassword({ email, password });
+  const result = await supabase.auth.signInWithPassword({ email, password });
+
+  if (result.error) {
+    return result;
+  }
+
+  if (result.data?.session?.user) {
+    return result;
+  }
+
+  const sessionResult = await supabase.auth.getSession();
+  if (sessionResult.error) {
+    return { data: result.data, error: sessionResult.error };
+  }
+
+  return { data: { ...result.data, session: sessionResult.data.session }, error: null };
 }
 
 export async function fetchProfileByEmail(email: string): Promise<SupabaseProfile | null> {

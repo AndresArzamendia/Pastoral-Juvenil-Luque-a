@@ -1,7 +1,7 @@
 // ─── SHARED PJL STORE ────────────────────────────────────────────────────────
 // Admin writes here → main page reads here.
 // All keys are stored in localStorage so changes persist across pages.
-import { upsertStoreValue } from './supabaseStore';
+import { fetchAllStoreValues, subscribeStoreChanges, upsertStoreValue } from './supabaseStore';
 
 export interface NewsItem     { id: number; title: string; body: string; date: string; published: boolean; }
 export interface Activity     { id: number; title: string; date: string; category: string; active: boolean; inscription: boolean; description?: string; }
@@ -312,6 +312,11 @@ export const TEAM_LABELS: Record<string, string> = {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+const STORE_KEYS = [
+  'news', 'activities', 'faq', 'docs', 'gallery', 'content', 'social', 'sections', 'profiles',
+  'branding', 'theme', 'users', 'hero', 'heroInterval', 'chapels', 'stats', 'logs'
+];
+
 function save<T>(key: string, value: T): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem('pjl_' + key, JSON.stringify(value));
@@ -320,6 +325,46 @@ function save<T>(key: string, value: T): void {
     // Si Supabase no está disponible, seguimos guardando localmente.
   });
 }
+
+async function syncRemoteValues() {
+  if (typeof window === 'undefined') return;
+  try {
+    const remoteValues = await fetchAllStoreValues<unknown>(STORE_KEYS);
+    Object.entries(remoteValues).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
+      const payload = JSON.stringify(value);
+      const current = localStorage.getItem('pjl_' + key);
+      if (current !== payload) {
+        localStorage.setItem('pjl_' + key, payload);
+        window.dispatchEvent(new CustomEvent('pjl_store_update', { detail: { key } }));
+      }
+    });
+  } catch (error) {
+    console.error('Error sincronizando datos desde Supabase:', error);
+  }
+}
+
+function initializeRemoteStoreSync() {
+  if (typeof window === 'undefined') return;
+  setTimeout(syncRemoteValues, 200);
+  const unsubscribe = subscribeStoreChanges((key, value) => {
+    if (!key) return;
+    try {
+      const payload = JSON.stringify(value);
+      const current = localStorage.getItem('pjl_' + key);
+      if (current !== payload) {
+        localStorage.setItem('pjl_' + key, payload);
+        window.dispatchEvent(new CustomEvent('pjl_store_update', { detail: { key } }));
+      }
+    } catch {
+      // Ignorar fallos de parseo.
+    }
+  });
+
+  window.addEventListener('beforeunload', () => unsubscribe());
+}
+
+initializeRemoteStoreSync();
 
 function load<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
