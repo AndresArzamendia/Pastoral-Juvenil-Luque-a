@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { getSupabaseClient } from './supabase';
 import type { User } from './pjlStore';
 
 const PROFILE_TABLE = 'user_profiles';
@@ -15,6 +15,7 @@ export interface SupabaseProfile {
 }
 
 export async function signUpProfile(name: string, email: string, password: string) {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -45,10 +46,12 @@ export async function signUpProfile(name: string, email: string, password: strin
 }
 
 export async function signInProfile(email: string, password: string) {
+  const supabase = getSupabaseClient();
   return supabase.auth.signInWithPassword({ email, password });
 }
 
 export async function fetchProfileByEmail(email: string): Promise<SupabaseProfile | null> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from(PROFILE_TABLE)
     .select('*')
@@ -64,6 +67,7 @@ export async function fetchProfileByEmail(email: string): Promise<SupabaseProfil
 }
 
 export async function fetchPendingProfiles(): Promise<SupabaseProfile[]> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from(PROFILE_TABLE)
     .select('*')
@@ -79,6 +83,7 @@ export async function fetchPendingProfiles(): Promise<SupabaseProfile[]> {
 }
 
 export async function approveProfile(profileId: string): Promise<boolean> {
+  const supabase = getSupabaseClient();
   const { error } = await supabase
     .from(PROFILE_TABLE)
     .update({ status: 'activo' })
@@ -93,10 +98,12 @@ export async function approveProfile(profileId: string): Promise<boolean> {
 }
 
 export async function updateAuthUser(email?: string, password?: string) {
+  const supabase = getSupabaseClient();
   return supabase.auth.updateUser({ email, password });
 }
 
 export async function fetchAllProfiles(): Promise<SupabaseProfile[]> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase.from(PROFILE_TABLE).select('*').order('created_at', { ascending: false });
   if (error) {
     console.error('Supabase fetchAllProfiles error:', error.message);
@@ -106,6 +113,7 @@ export async function fetchAllProfiles(): Promise<SupabaseProfile[]> {
 }
 
 export async function updateProfile(profileId: string, updates: Partial<SupabaseProfile>) {
+  const supabase = getSupabaseClient();
   const { error } = await supabase.from(PROFILE_TABLE).update(updates).eq('id', profileId);
   if (error) {
     console.error('Supabase updateProfile error:', error.message);

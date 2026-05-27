@@ -1,8 +1,9 @@
-import { supabase } from './supabase';
+import { getSupabaseClient } from './supabase';
 
 export const STORE_TABLE = 'pjl_store';
 
 export async function fetchStoreValue<T>(key: string): Promise<T | null> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from(STORE_TABLE)
     .select('value')
@@ -18,6 +19,7 @@ export async function fetchStoreValue<T>(key: string): Promise<T | null> {
 }
 
 export async function fetchAllStoreValues<T>(keys: string[]): Promise<Record<string, T>> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from(STORE_TABLE)
     .select('key, value')
@@ -35,6 +37,7 @@ export async function fetchAllStoreValues<T>(keys: string[]): Promise<Record<str
 }
 
 export async function upsertStoreValue(key: string, value: unknown): Promise<boolean> {
+  const supabase = getSupabaseClient();
   const { error } = await supabase
     .from(STORE_TABLE)
     .upsert({ key, value }, { onConflict: 'key' });
