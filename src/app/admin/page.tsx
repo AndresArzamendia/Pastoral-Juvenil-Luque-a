@@ -14,7 +14,7 @@ import {
   DEFAULT_STATS, DEFAULT_THEME_PALETTE, DEFAULT_USERS
 } from '@/lib/pjlStore';
 import { fetchStoreValue, upsertStoreValue, subscribeStoreChanges } from '@/lib/supabaseStore';
-import { SupabaseProfile, fetchProfileByEmail, fetchAllProfiles, fetchPendingProfiles, approveProfile, signInProfile, signUpProfile, subscribeProfileChanges } from '@/lib/supabaseProfiles';
+import { SupabaseProfile, fetchProfileByEmail, fetchAllProfiles, fetchPendingProfiles, approveProfile, signInProfile, signUpProfile, subscribeProfileChanges, deleteProfile } from '@/lib/supabaseProfiles';
 
 const ZonaMap = dynamic(() => import('@/components/ZonaMap'), { 
   ssr: false,
@@ -783,13 +783,24 @@ function AdminContent() {
     addLog(editId ? 'editar' : 'crear', 'usuarios', `User: ${form.email}`);
   };
 
-  const deleteItem = (type: 'news' | 'activities' | 'docs' | 'chapels' | 'users', id: number | string) => {
+  const deleteItem = async (type: 'news' | 'activities' | 'docs' | 'chapels' | 'users', id: number | string) => {
     if (!confirm('¿Estás seguro de eliminar este elemento?')) return;
     if (type === 'news') setNews(news.filter(n => n.id !== id));
     if (type === 'activities') setActivities(activities.filter(a => a.id !== id));
     if (type === 'docs') setDocs(docs.filter(d => d.id !== id));
     if (type === 'chapels') setChapels(chapels.filter(c => c.id !== id));
-    if (type === 'users') setAllUsers(allUsers.filter(u => u.id !== id));
+    if (type === 'users') {
+      const user = allUsers.find(u => u.id === id);
+      if (user) {
+        const { success, message } = await deleteProfile(user.id, user.authUid);
+        if (!success) {
+          alert(message || 'No se pudo eliminar el usuario en Supabase.');
+          return;
+        }
+      }
+      setAllUsers(allUsers.filter(u => u.id !== id));
+      setPendingProfiles(prev => prev.filter(p => p.id !== id));
+    }
     showToast('Elemento eliminado 🗑️');
     addLog('eliminar', type, `ID: ${id}`);
   };
@@ -2962,7 +2973,7 @@ function AdminContent() {
                           <td>
                             <div style={{ display: 'flex', gap: '5px' }}>
                               <button onClick={() => openEdit('usuarios', u)} className="btn-premium btn-premium-outline" style={{ padding: '5px 12px', fontSize: '0.65rem' }}>EDITAR</button>
-                              <button onClick={() => deleteItem('users', u.id)} className="btn-premium" style={{ color: '#ef4444', padding: '5px 12px', fontSize: '0.65rem', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)' }}>ELIMINAR</button>
+                              <button onClick={() => void deleteItem('users', u.id)} className="btn-premium" style={{ color: '#ef4444', padding: '5px 12px', fontSize: '0.65rem', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)' }}>ELIMINAR</button>
                             </div>
                           </td>
                         </tr>

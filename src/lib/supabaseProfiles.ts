@@ -285,3 +285,24 @@ export async function updateProfile(profileId: string, updates: Partial<Supabase
   }
   return true;
 }
+
+export async function deleteProfile(profileId: string, authUid?: string) {
+  try {
+    const response = await fetch('/api/supabase/delete-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profileId, authUid }),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error('Supabase deleteProfile failed:', result?.message || response.statusText);
+      return { success: false, message: result?.message || 'Error al eliminar el perfil.' };
+    }
+
+    return { success: result?.success === true, message: result?.message };
+  } catch (error) {
+    console.error('Supabase deleteProfile failed:', error);
+    return { success: false, message: String(error) };
+  }
+}
